@@ -4,4 +4,4 @@ Documents/
 	Used to keep track of any sort of documentation required for this project that isn't source code documentation. Documents such as our ER diagram and any sort of write up will go in this folder.
 
 Code/
-	This is where any source code will be kept. This includes code for the front end and the database.
+	This is where any source code will be kept. This includes code for the front end, middleware, and database.
