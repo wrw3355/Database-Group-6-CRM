@@ -34,8 +34,8 @@ ul li a {
     height: 100%;
     
     -moz-box-shadow: 0px 0px 8px #454545;
-	-webkit-box-shadow: 0px 0px 8px #454545;
-	box-shadow: 0px 0px 8px #454545;
+    -webkit-box-shadow: 0px 0px 8px #454545;
+    box-shadow: 0px 0px 8px #454545;
     
     overflow: hidden;
 }
