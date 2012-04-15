@@ -1,6 +1,16 @@
 
 var idMatches = $.deparam.querystring( true );
 
+function initEntityPage() {
+    var entity = idMatches["entity"];
+    var id = idMatches["id"];
+    var mode = idMatches["mode"];
+    
+    populateEntityMenu();
+    
+    $("#header > h1").html(toTitleCase(mode) + " - " + toTitleCase(entity));
+}
+
 function populateMenu() {
     var menu = getEntitiesWithText();
     var list = $("#top-options");
@@ -29,8 +39,33 @@ function populateMenu() {
         var editButton = $("<li/>");
         editButton.html("Edit");
         
+        var deleteButton = $("<li/>");
+        deleteButton.html("Delete");
+        
         topNav.append(createButton);
         topNav.append(editButton);
+        topNav.append(deleteButton);
+    }
+}
+
+function populateEntityMenu() {
+    var topNav = $("#top-nav > ul");
+    var mode = idMatches["mode"];
+    
+    if(idMatches != null) {        
+        var editButton = $("<li/>");
+        editButton.html("Edit");
+        
+        var deleteButton = $("<li/>");
+        deleteButton.html("Delete");
+        
+        if(mode == "view") {
+            topNav.append(editButton);
+        }
+        
+        if(mode == "view" || mode == "edit") {
+            topNav.append(deleteButton);
+        }
     }
 }
 
@@ -108,7 +143,7 @@ function populateGrid() {
 function showModalEntityPage(entity, id) {
     var entityName = toTitleCase(entity);
     
-    var pageURL = "entityPage.html?entity=" + entity + "&id=" + id;
+    var pageURL = "entityPage.html?entity=" + entity + "&id=" + id + "&mode=view";
     var pageTitle = "Entity - " + entityName;
     
     window.showModalDialog(pageURL, pageTitle, "dialogWidth: 840px; dialogHeight: 600px;");
