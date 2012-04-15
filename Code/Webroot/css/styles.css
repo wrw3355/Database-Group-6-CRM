@@ -166,3 +166,10 @@ table, td, tr {
     padding: 3px 8px;
     border-right: 1px solid #000;
 }
+
+#entity {
+    padding: 10px;
+
+    width: 100%;
+    min-height: 300px;
+}

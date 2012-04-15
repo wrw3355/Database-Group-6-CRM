@@ -116,7 +116,7 @@ function showModalEntityPage(entity, id) {
     var pageURL = "entityPage.html?entity=" + entity + "&id=" + id;
     var pageTitle = "Entity - " + entityName;
     
-    window.showModalDialog(pageURL, pageTitle, "dialogWidth: 800px; dialogHeight: 480px;");
+    window.showModalDialog(pageURL, pageTitle, "dialogWidth: 840px; dialogHeight: 600px;");
 }
 
 function toTitleCase(text) {
