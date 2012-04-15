@@ -66,11 +66,11 @@ function populateGrid() {
             content.html(entities[id][headers[key]]);
             
             row.append(content);
-            
-            row.click(function() {
-                alert("Open modal dialog here.");
-            });
         }
+        
+        row.click(function() {
+            showModalEntityPage(entity, id);
+        });
         
         grid.append(row);
         
@@ -78,6 +78,15 @@ function populateGrid() {
     }
     
     
+}
+
+function showModalEntityPage(entity, id) {
+    var entityName = entity.substring(0, 1).toUpperCase() + entity.substring(1);
+    
+    var pageURL = "entityPage.html?entity=" + entity + "&id=" + id;
+    var pageTitle = "Entity - " + entityName;
+    
+    window.showModalDialog(pageURL, pageTitle, "dialogWidth: 800px; dialogHeight: 480px;");
 }
 
 function getHeadersForEntity(entity) {
