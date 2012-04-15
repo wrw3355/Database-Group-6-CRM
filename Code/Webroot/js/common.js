@@ -28,7 +28,7 @@ function populateMenu() {
     createButton.html("Create " + toTitleCase(entity));
     
     var editButton = $("<li/>");
-    editButton.html("Edit " + toTitleCase(entity) + "(s)");
+    editButton.html("Edit");
     
     topNav.append(createButton);
     topNav.append(editButton);
