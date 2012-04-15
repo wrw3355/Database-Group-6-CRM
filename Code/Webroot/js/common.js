@@ -1,6 +1,5 @@
 
-var idRe = /.*\?entity=(.*)&?(.*)/;
-
+var idMatches = $.deparam.querystring( true );
 
 function populateMenu() {
     var menu = getEntitiesWithText();
@@ -18,13 +17,11 @@ function populateMenu() {
         
         list.append(listItem);
     }
-    
-    var idMatches = idRe.exec(window.location);
-    
+        
     var topNav = $("#top-nav > ul");
 
     if(idMatches != null) {
-        var entity = idMatches[1];
+        var entity = idMatches["entity"];
         
         var createButton = $("<li/>");
         createButton.html("Create " + toTitleCase(entity));
@@ -40,15 +37,13 @@ function populateMenu() {
 function populateGrid() {
     var grid = $("#grid");
     var content = $("#content").prepend(pageHeader);
-
-    var idMatches = idRe.exec(window.location);
     
     if (typeof idMatches == "undefined" || idMatches == null) {
         alert("Error: Malformed request.");
         return;
     }
     
-    var entity = idMatches[1];
+    var entity = idMatches["entity"];
     
     var pageName = getEntitiesWithText()[entity];
     var pageHeader = $("<h2/>");
