@@ -6,6 +6,7 @@ function populateMenu() {
     var menu = getEntitiesWithText();
     var list = $("#top-options");
     
+    // Top Menu
     for (var entity in menu) {
         var listItem = $("<li/>");
         
@@ -16,8 +17,22 @@ function populateMenu() {
         listItem.append(link);
         
         list.append(listItem);
-        
     }
+    
+    var idMatches = idRe.exec(window.location);
+    var entity = idMatches[1];
+    
+    var topNav = $("#top-nav > ul");
+    
+    var createButton = $("<li/>");
+    createButton.html("Create " + toTitleCase(entity));
+    
+    var editButton = $("<li/>");
+    editButton.html("Edit " + toTitleCase(entity) + "(s)");
+    
+    topNav.append(createButton);
+    topNav.append(editButton);
+    //<li>Create</li>
 }
 
 function populateGrid() {
@@ -48,7 +63,7 @@ function populateGrid() {
         var errorRow = $("<tr/>");
         errorRow.attr("class", "noEntries");
         
-        var errorContent = $("<td COLSPAN=\"2\"/>");
+        var errorContent = $("<td COLSPAN=\"3\"/>");
         errorContent.html("There are no records to display for this entity.");
         
         errorRow.append(errorContent);
@@ -61,16 +76,29 @@ function populateGrid() {
         var row = $("<tr/>");
         row.attr("class", "row" + count);
         
+        var checkboxCol = $("<td/>");
+        checkboxCol.attr("class", "checkboxContainer");
+        
+        var checkbox = $("<input/>");
+        checkbox.attr("name", id);
+        checkbox.attr("id", id);
+        checkbox.attr("type", "checkbox");
+        
+        checkboxCol.append(checkbox);
+        row.append(checkboxCol);
+        
+        
         for (var key in headers) {
             var content = $("<td/>");
             content.html(entities[id][headers[key]]);
             
+            content.click(function() {
+                showModalEntityPage(entity, id);
+            });
+            
             row.append(content);
         }
         
-        row.click(function() {
-            showModalEntityPage(entity, id);
-        });
         
         grid.append(row);
         
@@ -81,12 +109,16 @@ function populateGrid() {
 }
 
 function showModalEntityPage(entity, id) {
-    var entityName = entity.substring(0, 1).toUpperCase() + entity.substring(1);
+    var entityName = toTitleCase(entity);
     
     var pageURL = "entityPage.html?entity=" + entity + "&id=" + id;
     var pageTitle = "Entity - " + entityName;
     
     window.showModalDialog(pageURL, pageTitle, "dialogWidth: 800px; dialogHeight: 480px;");
+}
+
+function toTitleCase(text) {
+    return text.substring(0, 1).toUpperCase() + text.substring(1);
 }
 
 function getHeadersForEntity(entity) {
@@ -99,6 +131,9 @@ function getHeadersForEntity(entity) {
 function insertHeaderRow(headers, grid) {
     var headerRow = $("<tr/>");
     headerRow.attr("id", "headerRow");
+    
+    var checkboxCol = $("<td/>");
+    headerRow.append(checkboxCol)
     
     for (var text in headers) {
         

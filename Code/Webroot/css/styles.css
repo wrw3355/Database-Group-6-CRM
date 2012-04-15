@@ -41,6 +41,11 @@ table, td, tr {
     padding: 10px;
 }
 
+.checkboxContainer {
+    width: 50px;
+    text-align: center;
+}
+
 #main {
     background: #EAEAEA;
     
@@ -71,9 +76,28 @@ table, td, tr {
 #top-nav {
     background: url("../img/menu.png") repeat-x;
 
-    height: 30px;
+    height: 35px;
     
     border-bottom: 1px solid #333;
+}
+
+#top-nav li {
+    background: #555;
+    
+    padding: 1px 10px;
+    margin: 5px 10px;
+    border: 1px solid #222;
+    
+    width: auto;
+    
+    color: #FFF;
+    
+    float: left;
+}
+
+#top-nav li:hover {
+    background: #111;
+    cursor: pointer;
 }
 
 #side-nav {
@@ -128,12 +152,17 @@ table, td, tr {
     cursor: pointer;
 }
 
+#grid td {
+    padding: 3px;
+}
+
 #headerRow {
     background: #222;
     border-bottom: 1px solid #000;
     color: #EEE;
 }
 
-#grid td {
-    padding: 3px;
+#headerRow td {
+    padding: 3px 8px;
+    border-right: 1px solid #000;
 }
