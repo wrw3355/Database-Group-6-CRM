@@ -1,6 +1,12 @@
 
 var idMatches = $.deparam.querystring( true );
 
+var MODE_CREATE = "create";
+var MODE_VIEW = "view";
+var MODE_EDIT = "edit";
+var MODE_DELETE = "delete";
+
+
 function initEntityPage() {
     var entity = idMatches["entity"];
     var id = idMatches["id"];
@@ -9,6 +15,8 @@ function initEntityPage() {
     populateEntityMenu();
     
     $("#header > h1").html(toTitleCase(mode) + " - " + toTitleCase(entity));
+    
+    
 }
 
 function populateMenu() {
@@ -30,7 +38,7 @@ function populateMenu() {
         
     var topNav = $("#top-nav > ul");
 
-    if(idMatches != null) {
+    if (idMatches != null) {
         var entity = idMatches["entity"];
         
         var createButton = $("<li/>");
@@ -38,6 +46,18 @@ function populateMenu() {
         
         var editButton = $("<li/>");
         editButton.html("Edit");
+        editButton.click(function() {
+            var checkboxes = $("input[type=checkbox]:checked");
+            
+            if (checkboxes.length < 1) {
+                alert("You have not selected any records to edit.");
+                return;
+            }
+            
+            checkboxes.each(function() {
+                showModalEntityPage(entity, this.value, MODE_EDIT);
+            });
+        });
         
         var deleteButton = $("<li/>");
         deleteButton.html("Delete");
@@ -52,20 +72,28 @@ function populateEntityMenu() {
     var topNav = $("#top-nav > ul");
     var mode = idMatches["mode"];
     
-    if(idMatches != null) {        
+    if (idMatches != null) {        
         var editButton = $("<li/>");
         editButton.html("Edit");
+        
+        var saveButton = $("<li/>");
+        saveButton.html("Save");
         
         var deleteButton = $("<li/>");
         deleteButton.html("Delete");
         
-        if(mode == "view") {
+        if (mode == MODE_VIEW) {
             topNav.append(editButton);
         }
         
-        if(mode == "view" || mode == "edit") {
+        if (mode == MODE_EDIT) {
+            topNav.append(saveButton);
+        }
+        
+        if (mode == MODE_VIEW || mode == MODE_EDIT) {
             topNav.append(deleteButton);
         }
+        
     }
 }
 
@@ -112,7 +140,7 @@ function populateGrid() {
         checkboxCol.attr("class", "checkboxContainer");
         
         var checkbox = $("<input/>");
-        checkbox.attr("name", id);
+        checkbox.attr("value", id);
         checkbox.attr("id", id);
         checkbox.attr("type", "checkbox");
         
@@ -125,7 +153,7 @@ function populateGrid() {
             content.html(entities[id][headers[key]]);
             
             content.click(function() {
-                showModalEntityPage(entity, id);
+                showModalEntityPage(entity, id, MODE_VIEW);
             });
             
             row.append(content);
@@ -140,10 +168,10 @@ function populateGrid() {
     
 }
 
-function showModalEntityPage(entity, id) {
+function showModalEntityPage(entity, id, mode) {
     var entityName = toTitleCase(entity);
     
-    var pageURL = "entityPage.html?entity=" + entity + "&id=" + id + "&mode=view";
+    var pageURL = "entityPage.html?entity=" + entity + "&id=" + id + "&mode=" + mode;
     var pageTitle = "Entity - " + entityName;
     
     window.showModalDialog(pageURL, pageTitle, "dialogWidth: 840px; dialogHeight: 600px;");
