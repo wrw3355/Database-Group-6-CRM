@@ -6,7 +6,7 @@ function populateMenu() {
     var menu = getEntitiesWithText();
     var list = $("#top-options");
     
-    // Top Menu
+    // Side menu    
     for (var entity in menu) {
         var listItem = $("<li/>");
         
@@ -20,19 +20,21 @@ function populateMenu() {
     }
     
     var idMatches = idRe.exec(window.location);
-    var entity = idMatches[1];
     
     var topNav = $("#top-nav > ul");
-    
-    var createButton = $("<li/>");
-    createButton.html("Create " + toTitleCase(entity));
-    
-    var editButton = $("<li/>");
-    editButton.html("Edit");
-    
-    topNav.append(createButton);
-    topNav.append(editButton);
-    //<li>Create</li>
+
+    if(idMatches != null) {
+        var entity = idMatches[1];
+        
+        var createButton = $("<li/>");
+        createButton.html("Create " + toTitleCase(entity));
+        
+        var editButton = $("<li/>");
+        editButton.html("Edit");
+        
+        topNav.append(createButton);
+        topNav.append(editButton);
+    }
 }
 
 function populateGrid() {
