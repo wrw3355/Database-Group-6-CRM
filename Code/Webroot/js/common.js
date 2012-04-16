@@ -6,17 +6,79 @@ var MODE_VIEW = "view";
 var MODE_EDIT = "edit";
 var MODE_DELETE = "delete";
 
+var TYPE_TEXT = TYPE_TEXT;
+var TYPE_DATE = TYPE_DATE;
+
 
 function initEntityPage() {
     var entity = idMatches["entity"];
-    var id = idMatches["id"];
     var mode = idMatches["mode"];
     
     populateEntityMenu();
     
     $("#header > h1").html(toTitleCase(mode) + " - " + toTitleCase(entity));
     
+    populateEntityPage();
+}
+
+function populateEntityPage() {
+    var entityForm = $("#entity");
+    var entity = idMatches["entity"];
+    var id = idMatches["id"];
+    var mode = idMatches["mode"];
     
+    var fields = getSchemaForEntity(entity);
+    var entities = getRecordsForEntity(entity);
+    
+    for (var name in fields) {
+        var element;
+
+        if(fields[name] == TYPE_TEXT) {
+            var label = $("<label/>");
+            label.attr("for", name);
+            label.html(toTitleCase(name) + ": ");
+            
+            if(mode == MODE_CREATE || mode == MODE_EDIT) {
+
+                element = $("<input/>");
+                element.attr("type", "text");
+                element.attr("id", name);
+                
+                if(mode == MODE_EDIT) {
+                    if(typeof entities[id] == "undefined" || entities[id] == null) {
+                        alert("A record with the id '" + id + "' does not exist.");
+                        return;
+                    }
+                    
+                    var value = entities[id][name]["value"];
+                    element.attr("value", value);
+                }
+            }
+            else if(mode == MODE_VIEW) {                
+                element = $("<div/>");
+                element.attr("class", "attributeText");
+                element.attr("id", name);
+                
+                if(typeof entities[id] == "undefined" || entities[id] == null) {
+                    alert("A record with the id '" + id + "' does not exist.");
+                    return;
+                }
+                
+                var value = entities[id][name]["value"];
+                element.html(value);
+            }
+        }
+        
+        var separator = $("<br/>");
+        
+        var clear = $("<span/>");
+        clear.attr("class", "clear");
+        
+        entityForm.append(label);
+        entityForm.append(element);
+        entityForm.append(clear);
+        entityForm.append(separator);
+    }
 }
 
 function populateMenu() {
@@ -153,7 +215,7 @@ function populateGrid() {
         
         for (var key in headers) {
             var content = $("<td/>");
-            content.html(entities[id][headers[key]]);
+            content.html(entities[id][headers[key]]["value"]);
             
             content.click(function() {
                 showModalEntityPage(entity, id, MODE_VIEW);
@@ -216,52 +278,162 @@ function insertHeaderRow(headers, grid) {
     grid.append(headerRow);
 }
 
+function getSchemaForEntity(entity) {
+    var schema = {
+        "company": {
+            "name": TYPE_TEXT,
+            "address": TYPE_TEXT,
+            "type": TYPE_TEXT,
+            "email": TYPE_TEXT,
+            "phone": TYPE_TEXT
+        }
+    }
+    
+    if (typeof schema[entity] == "undefined") {
+        alert("This entity is not supported in this phase.");
+        return null;
+    }
+    
+    return schema[entity];
+}
+
 function getRecordsForEntity(entity) {
     var entities = {
         "company": {
             "1": {
-                "name": "Test Company",
-                "address": "123 Fake Street",
-                "type": "Industrial",
-                "email": "user@domain.com",
-                "phone": "555-555-5555",
-                "date": "1/1/2008"
+                "name": {
+                    "value": "Test Company",
+                    "type": TYPE_TEXT
+                },
+                "address": {
+                    "value": "123 Fake Street",
+                    "type": TYPE_TEXT
+                },
+                "type": {
+                    "value": "Industrial",
+                    "type": TYPE_TEXT
+                },
+                "email": {
+                    "value": "user@domain.com",
+                    "type": TYPE_TEXT
+                },
+                "phone":  {
+                    "value": "555-555-5555",
+                    "type": TYPE_TEXT
+                },
+                "date": {
+                    "value": "1/1/2008",
+                    "type": TYPE_DATE,
+                    "noedit": true
+                }
             },
-            
             "2": {
-                "name": "XYZ Company",
-                "address": "1 Main Street",
-                "type": "Cooling Technologies",
-                "email": "user@domain.com",
-                "phone": "666-666-6666",
-                "date": "1/1/2008"
+                "name": {
+                    "value": "XYZ Company",
+                    "type": TYPE_TEXT
+                },
+                "address": {
+                    "value": "123 Fake Street",
+                    "type": TYPE_TEXT
+                },
+                "type": {
+                    "value": "Industrial",
+                    "type": TYPE_TEXT
+                },
+                "email": {
+                    "value": "user@domain.com",
+                    "type": TYPE_TEXT
+                },
+                "phone":  {
+                    "value": "555-555-5555",
+                    "type": TYPE_TEXT
+                },
+                "date": {
+                    "value": "1/1/2008",
+                    "type": TYPE_DATE,
+                    "noedit": true
+                }
             },
-            
             "3": {
-                "name": "Thermal Company",
-                "address": "2 Main Street",
-                "type": "Cooling Technologies",
-                "email": "user@domain.com",
-                "phone": "777-777-7777",
-                "date": "1/1/2008"
+                "name": {
+                    "value": "Thermal Company",
+                    "type": TYPE_TEXT
+                },
+                "address": {
+                    "value": "123 Fake Street",
+                    "type": TYPE_TEXT
+                },
+                "type": {
+                    "value": "Cooling Technology",
+                    "type": TYPE_TEXT
+                },
+                "email": {
+                    "value": "user@domain.com",
+                    "type": TYPE_TEXT
+                },
+                "phone":  {
+                    "value": "555-555-5555",
+                    "type": TYPE_TEXT
+                },
+                "date": {
+                    "value": "1/1/2008",
+                    "type": TYPE_DATE,
+                    "noedit": true
+                }
             },
-            
             "4": {
-                "name": "Nanosoft",
-                "address": "3 Main Street",
-                "type": "Shovelware",
-                "email": "user@domain.com",
-                "phone": "777-777-7777",
-                "date": "1/1/2008"
+                "name": {
+                    "value": "Nanosoft",
+                    "type": TYPE_TEXT
+                },
+                "address": {
+                    "value": "123 Fake Street",
+                    "type": TYPE_TEXT
+                },
+                "type": {
+                    "value": "Industrial",
+                    "type": TYPE_TEXT
+                },
+                "email": {
+                    "value": "user@domain.com",
+                    "type": TYPE_TEXT
+                },
+                "phone":  {
+                    "value": "555-555-5555",
+                    "type": TYPE_TEXT
+                },
+                "date": {
+                    "value": "1/1/2008",
+                    "type": TYPE_DATE,
+                    "noedit": true
+                }
             },
-            
             "5": {
-                "name": "Random",
-                "address": "4 Main Street",
-                "type": "Random",
-                "email": "user@domain.com",
-                "phone": "888-888-8888",
-                "date": "1/1/2008"
+                "name": {
+                    "value": "Random",
+                    "type": TYPE_TEXT
+                },
+                "address": {
+                    "value": "123 Fake Street",
+                    "type": TYPE_TEXT
+                },
+                "type": {
+                    "value": "Random",
+                    "type": TYPE_TEXT
+                },
+                "email": {
+                    "value": "user@domain.com",
+                    "type": TYPE_TEXT
+                },
+                "phone":  {
+                    "value": "555-555-5555",
+                    "type": TYPE_TEXT
+                },
+                "date": {
+                    "value": "1/1/2008",
+                    "type": TYPE_DATE,
+                    "noedit": true
+                }
             }
         }
     };
