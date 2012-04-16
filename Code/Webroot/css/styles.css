@@ -102,8 +102,8 @@ table, td, tr {
 
 #side-nav {
     
-    width: 21%;
-    min-width: 168px;
+    width: 19%;
+    min-width: 148px;
     
     height: inherit;
     
@@ -123,8 +123,8 @@ table, td, tr {
 
 #content {
     background: #FEFEFE;
-    width: 79%;
-    min-width: 608px;
+    width: 81%;
+    min-width: 628px;
     
     height: 100%;
     min-height: 300px;
