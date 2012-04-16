@@ -43,6 +43,9 @@ function populateMenu() {
         
         var createButton = $("<li/>");
         createButton.html("Create " + toTitleCase(entity));
+        createButton.click(function() {
+            showModalEntityPage(entity, null, MODE_CREATE);
+        });
         
         var editButton = $("<li/>");
         editButton.html("Edit");
@@ -86,7 +89,7 @@ function populateEntityMenu() {
             topNav.append(editButton);
         }
         
-        if (mode == MODE_EDIT) {
+        if (mode == MODE_CREATE || mode == MODE_EDIT) {
             topNav.append(saveButton);
         }
         
@@ -171,10 +174,17 @@ function populateGrid() {
 function showModalEntityPage(entity, id, mode) {
     var entityName = toTitleCase(entity);
     
-    var pageURL = "entityPage.html?entity=" + entity + "&id=" + id + "&mode=" + mode;
+    var pageURL = [];
+    pageURL.push("entityPage.html?");
+    pageURL.push("entity=" + entity);
+    pageURL.push("&mode=" + mode);
+    
+    if(mode != MODE_CREATE) {
+        pageURL.push("&id=" + id);
+    }
     var pageTitle = "Entity - " + entityName;
     
-    window.showModalDialog(pageURL, pageTitle, "dialogWidth: 840px; dialogHeight: 600px;");
+    window.showModalDialog(pageURL.join(""), pageTitle, "dialogWidth: 840px; dialogHeight: 600px;");
 }
 
 function toTitleCase(text) {
