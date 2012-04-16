@@ -255,11 +255,13 @@ function populateGrid() {
         
         for (var key in headers) {
             var content = $("<td/>");
+            content.attr("id", id);
             content.html(entities[id][headers[key]]["value"]);
             
             content.click(function() {
-                showModalEntityPage(entity, id, MODE_VIEW);
-            });
+                // Issue with JavaScript closures
+                return showModalEntityPage(entity, this.id, MODE_VIEW);
+           });
             
             row.append(content);
         }
@@ -269,8 +271,6 @@ function populateGrid() {
         
         count = (count + 1) % 2;
     }
-    
-    
 }
 
 function showModalEntityPage(entity, id, mode) {
