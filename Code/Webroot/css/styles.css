@@ -46,12 +46,6 @@ table, td, tr {
     text-align: center;
 }
 
-.textLabel {
-    margin: 10px 0px 10px 40px;
-    width: 100px;
-    float: left;
-}
-
 #main {
     background: #EAEAEA;
     
@@ -193,4 +187,5 @@ label {
 
 #entity input, .attributeText {
     margin: 10px 0px;
+    height: auto;
 }

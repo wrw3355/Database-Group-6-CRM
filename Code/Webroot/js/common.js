@@ -126,6 +126,23 @@ function populateMenu() {
         
         var deleteButton = $("<li/>");
         deleteButton.html("Delete");
+        deleteButton.click(function() {
+            var checkboxes = $("input[type=checkbox]:checked");
+            
+            if (checkboxes.length < 1) {
+                alert("You have not selected any records to delete.");
+                return;
+            }
+            
+            if(confirm("Are you sure you want to delete the selected records?")) {
+                checkboxes.each(function() {
+                    // TODO: Delete from database
+                });
+            }
+            else {
+                return;
+            }
+        });
         
         topNav.append(createButton);
         topNav.append(editButton);
@@ -135,17 +152,40 @@ function populateMenu() {
 
 function populateEntityMenu() {
     var topNav = $("#top-nav > ul");
+    var id = idMatches["id"];
+    var entity = idMatches["entity"];
     var mode = idMatches["mode"];
     
     if (idMatches != null) {        
         var editButton = $("<li/>");
         editButton.html("Edit");
+        editButton.click(function() {
+            window.location = "entityPage.html?id=" + id + "&entity=" + entity + "&mode=edit";
+        });
         
         var saveButton = $("<li/>");
         saveButton.html("Save");
+        saveButton.click(function() {
+            if(mode == MODE_CREATE) {
+                // TODO: Commit to database, get an id back
+            }
+            else if(mode == MODE_EDIT) {
+                // TODO: Commit to database
+                window.location = "entityPage.html?id=" + id + "&entity=" + entity + "&mode=view";
+            }
+        });
         
         var deleteButton = $("<li/>");
         deleteButton.html("Delete");
+        deleteButton.click(function() {
+            if(confirm("Are you sure you want to delete this record?")) {
+                // TODO: Delete from database
+                window.close();
+            }
+            else {
+                return;
+            }
+        });
         
         if (mode == MODE_VIEW) {
             topNav.append(editButton);
