@@ -204,7 +204,7 @@ function populateEntityMenu() {
 
 function populateGrid() {
     var grid = $("#grid");
-    var content = $("#content").prepend(pageHeader);
+    var content = $("#content");
     
     if (typeof idMatches == "undefined" || idMatches == null) {
         alert("Error: Malformed request.");
@@ -216,6 +216,8 @@ function populateGrid() {
     var pageName = getEntitiesWithText()[entity];
     var pageHeader = $("<h2/>");
     pageHeader.html(pageName);
+    
+    content.prepend(pageHeader);
     
     // Insert the top of the page header
     var headers = getHeadersForEntity(entity);
