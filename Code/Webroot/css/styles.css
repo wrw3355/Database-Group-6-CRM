@@ -47,6 +47,14 @@ table, td, tr {
     float: left;
 }
 
+.mainPageBlock h1 {
+    background-color: #000;
+    color: #FFF;
+    
+    font-size: 16px;
+    padding: 5px;
+}
+
 .clear {
     clear: both;
 }
