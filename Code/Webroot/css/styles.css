@@ -1,3 +1,7 @@
+* {
+    font-family: segoe ui, arial, helvetica, sans-serif;
+}
+
 body {
     background: #C3C3C3 url("../img/background.png") repeat-x;
 }
@@ -26,6 +30,21 @@ table, td, tr {
     border: 0;
 	border-collapse: collapse;
 	border-spacing: 0;
+}
+
+.mainBlockContainer {
+    width: 700px;
+    margin: 0px auto;
+}
+
+.mainPageBlock {
+    width: 300px;
+    height: 300px;
+    
+    border: 1px solid #000;
+    margin: 20px;
+    
+    float: left;
 }
 
 .clear {
