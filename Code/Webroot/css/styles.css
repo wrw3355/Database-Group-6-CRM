@@ -1,0 +1,218 @@
+* {
+    font-family: segoe ui, arial, helvetica, sans-serif;
+}
+
+body {
+    background: #C3C3C3 url("../img/background.png") repeat-x;
+}
+
+h1 {
+    height: auto;
+    margin: 0px 0px 0px 0px;
+    padding: 35px;
+}
+
+h2 {
+    margin-top: 2px;
+}
+
+ul {
+    margin: 0px;
+    padding: 0px;
+    list-style-type: none;
+}
+
+ul li a {
+    color: #222;
+}
+
+table, td, tr {
+    border: 0;
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+.mainBlockContainer {
+    width: 700px;
+    margin: 0px auto;
+}
+
+.mainPageBlock {
+    width: 300px;
+    height: 300px;
+    
+    border: 1px solid #000;
+    margin: 20px;
+    
+    float: left;
+}
+
+.mainPageBlock h1 {
+    background-color: #000;
+    color: #FFF;
+    
+    font-size: 16px;
+    padding: 5px;
+}
+
+.clear {
+    clear: both;
+}
+
+.row1 {
+    background: #DFDFDF;
+}
+
+.noEntries {
+    text-align: center;
+    padding: 10px;
+}
+
+.checkboxContainer {
+    width: 50px;
+    text-align: center;
+}
+
+#main {
+    background: #EAEAEA;
+    
+    margin: 35px auto;
+    border: 1px solid #222;
+    
+    width: 75%;
+    min-width: 800px;
+    
+    height: 100%;
+    
+    -moz-box-shadow: 0px 0px 8px #454545;
+    -webkit-box-shadow: 0px 0px 8px #454545;
+    box-shadow: 0px 0px 8px #454545;
+    
+    overflow: hidden;
+}
+
+#header {
+    background: url("../img/header.png") repeat-x;
+    
+    width: 100%;
+    height: 119px;
+    
+    border-bottom: 1px solid #333;
+}
+
+#top-nav {
+    background: url("../img/menu.png") repeat-x;
+
+    height: 35px;
+    
+    border-bottom: 1px solid #333;
+}
+
+#top-nav li {
+    background: #555;
+    
+    padding: 1px 10px;
+    margin: 5px 10px;
+    border: 1px solid #222;
+    
+    width: auto;
+    
+    color: #FFF;
+    
+    float: left;
+}
+
+#top-nav li:hover {
+    background: #111;
+    cursor: pointer;
+}
+
+#side-nav {
+    
+    width: 19%;
+    min-width: 148px;
+    
+    height: inherit;
+    
+    float: left;
+    clear: left;
+}
+
+#side-nav ul {
+    margin: 20px 0px 10px 30px;
+}
+
+#side-nav #bottom-options ul {
+    margin-top: 40px;
+    position: relative;
+    bottom: 0;
+}
+
+#content {
+    background: #FEFEFE;
+    width: 81%;
+    min-width: 628px;
+    
+    height: 100%;
+    min-height: 300px;
+    
+    border-left: 1px solid #000;
+    
+    margin-left: -9px;
+    
+    padding: 15px 0px 15px 8px;
+    
+    float: left;
+    clear: right;
+}
+
+#grid {
+    padding: 5px;
+    margin: 0px auto;
+    border: 1px solid #000;
+    
+    width: 97%;
+}
+
+#grid  .row0:hover, #grid .row1:hover {
+    background: #C0C0C0;
+    cursor: pointer;
+}
+
+#grid td {
+    padding: 3px;
+}
+
+#headerRow {
+    background: #222;
+    border-bottom: 1px solid #000;
+    color: #EEE;
+}
+
+#headerRow td {
+    padding: 3px 8px;
+    border-right: 1px solid #000;
+}
+
+#entity {
+    padding: 10px;
+
+    width: 100%;
+    min-height: 300px;
+}
+
+label {
+    margin: 10px 0px 10px 40px;
+    float: left;
+    width: 100px;
+}
+
+#entity input[type=text] {
+    width: 300px;
+    padding: 2px;
+}
+
+#entity input, .attributeText {
+    margin: 10px 0px;
+    height: auto;
+}
