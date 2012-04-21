@@ -15,6 +15,7 @@ import java.util.List;
  * into the database.
  * 
  * @author William Wenzel
+ * @author Nick Garvey
  *
  */
 public class JDBCLogic {
