@@ -340,152 +340,23 @@ function getSchemaForEntity(entity) {
 }
 
 function getRecordForEntity(entity, id) {
-    var entities = {
-        "company": {
-            "1": {
-                "name": {
-                    "value": "Test Company",
-                    "type": TYPE_TEXT
-                },
-                "address": {
-                    "value": "123 Fake Street",
-                    "type": TYPE_TEXT
-                },
-                "type": {
-                    "value": "Industrial",
-                    "type": TYPE_TEXT
-                },
-                "email": {
-                    "value": "user@domain.com",
-                    "type": TYPE_TEXT
-                },
-                "phone":  {
-                    "value": "555-555-5555",
-                    "type": TYPE_TEXT
-                },
-                "date": {
-                    "value": "1/1/2008",
-                    "type": TYPE_DATE,
-                    "noedit": true
-                }
-            },
-            "2": {
-                "name": {
-                    "value": "XYZ Company",
-                    "type": TYPE_TEXT
-                },
-                "address": {
-                    "value": "123 Fake Street",
-                    "type": TYPE_TEXT
-                },
-                "type": {
-                    "value": "Industrial",
-                    "type": TYPE_TEXT
-                },
-                "email": {
-                    "value": "user@domain.com",
-                    "type": TYPE_TEXT
-                },
-                "phone":  {
-                    "value": "555-555-5555",
-                    "type": TYPE_TEXT
-                },
-                "date": {
-                    "value": "1/1/2008",
-                    "type": TYPE_DATE,
-                    "noedit": true
-                }
-            },
-            "3": {
-                "name": {
-                    "value": "Thermal Company",
-                    "type": TYPE_TEXT
-                },
-                "address": {
-                    "value": "123 Fake Street",
-                    "type": TYPE_TEXT
-                },
-                "type": {
-                    "value": "Cooling Technology",
-                    "type": TYPE_TEXT
-                },
-                "email": {
-                    "value": "user@domain.com",
-                    "type": TYPE_TEXT
-                },
-                "phone":  {
-                    "value": "555-555-5555",
-                    "type": TYPE_TEXT
-                },
-                "date": {
-                    "value": "1/1/2008",
-                    "type": TYPE_DATE,
-                    "noedit": true
-                }
-            },
-            "4": {
-                "name": {
-                    "value": "Nanosoft",
-                    "type": TYPE_TEXT
-                },
-                "address": {
-                    "value": "123 Fake Street",
-                    "type": TYPE_TEXT
-                },
-                "type": {
-                    "value": "Industrial",
-                    "type": TYPE_TEXT
-                },
-                "email": {
-                    "value": "user@domain.com",
-                    "type": TYPE_TEXT
-                },
-                "phone":  {
-                    "value": "555-555-5555",
-                    "type": TYPE_TEXT
-                },
-                "date": {
-                    "value": "1/1/2008",
-                    "type": TYPE_DATE,
-                    "noedit": true
-                }
-            },
-            "5": {
-                "name": {
-                    "value": "Random",
-                    "type": TYPE_TEXT
-                },
-                "address": {
-                    "value": "123 Fake Street",
-                    "type": TYPE_TEXT
-                },
-                "type": {
-                    "value": "Random",
-                    "type": TYPE_TEXT
-                },
-                "email": {
-                    "value": "user@domain.com",
-                    "type": TYPE_TEXT
-                },
-                "phone":  {
-                    "value": "555-555-5555",
-                    "type": TYPE_TEXT
-                },
-                "date": {
-                    "value": "1/1/2008",
-                    "type": TYPE_DATE,
-                    "noedit": true
-                }
-            }
+    var result;
+    $.ajax(
+        type: "GET",
+        url: "http://localhost:8080/DatabaseConceptsServer/rest/" + entity + "/" + id, 
+        dataType: 'json',
+        async: false,
+        success: function(data) {
+            result = data;
         }
-    };
+    );
     
-    if (typeof entities[entity] == "undefined") {
+    if (typeof result == "undefined") {
         alert("This entity is not supported in this phase.");
         return null;
     }
     
-    return entities[entity];
+    return result;
 }
 
 function getEntitiesWithText() {
