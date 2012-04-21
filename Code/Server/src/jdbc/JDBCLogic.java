@@ -99,7 +99,7 @@ public class JDBCLogic {
 	 * @return
 	 * 		A SQL query to select the specified record.
 	 */
-    public String generateSelectQuery(final HashMap<String, String> record, final String entityName) {
+    private String generateSelectQuery(final HashMap<String, String> record, final String entityName) {
     	String whereClause = "";
     	
     	if(record.containsKey(ID_COLUMN)) {
@@ -127,7 +127,7 @@ public class JDBCLogic {
      * 
      * @throws CRMExecutionException
      */
-    public String generateUpdateQuery(final HashMap<String, String> record, final String entityName) 
+    private String generateUpdateQuery(final HashMap<String, String> record, final String entityName) 
             throws CRMExecutionException {
             
         StringBuilder sqlStatement = new StringBuilder("UPDATE " + entityName + " SET ");
@@ -160,7 +160,7 @@ public class JDBCLogic {
      * @return
      * 		A SQL query to create the given record.
      */
-    public String generateInsertStatement(final HashMap<String, String> record, final String entityName) {
+    private String generateInsertStatement(final HashMap<String, String> record, final String entityName) {
         final StringBuilder attributesBuilder = new StringBuilder();
         final StringBuilder valuesBuilder = new StringBuilder();
         
@@ -198,11 +198,23 @@ public class JDBCLogic {
      * @return
      * 		A SQL query to delete the given record.
      */
-    public String generateDeleteStatement(final HashMap<String, String> record, final String entityName) {
+    private String generateDeleteStatement(final HashMap<String, String> record, final String entityName) {
         return "DELETE FROM " + entityName + " WHERE id=" + record.get(ID_COLUMN) + ";";
     }
     
-    public HashMap<String, String> getSchemaDataForEntity(final String entityName) throws CRMExecutionException, CRMConnectionFailure {
+    /**
+     * Generates a map of column name to data type
+     * 
+     * @param entityName
+     * 		The entity type (table name).
+     * 
+     * @return
+     * 		A map of column name to data type mapping
+     * 
+     * @throws CRMExecutionException
+     * @throws CRMConnectionFailure
+     */
+    private HashMap<String, String> getSchemaDataForEntity(final String entityName) throws CRMExecutionException, CRMConnectionFailure {
     	final Connection conn = JDBCController.getSchemaConnection();
 		
 		try {
@@ -273,7 +285,7 @@ public class JDBCLogic {
      * @throws CRMExecutionException
      * @throws CRMConnectionFailure
      */
-    public List<Entity> executeSQL(final String query, final String database, final boolean manipulation, final String entityName) 
+    private List<Entity> executeSQL(final String query, final String database, final boolean manipulation, final String entityName) 
 			throws CRMExecutionException, CRMConnectionFailure {
 		final Connection conn = JDBCController.getConnection(database);
 		

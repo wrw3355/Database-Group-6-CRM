@@ -59,7 +59,9 @@ public class Handler {
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getEntity(@PathParam("entity") String entity,
 			@PathParam("id") String id) {
-		return "entity: " + entity + "\nid: " + id;
+
+		
+		
 	}
 
 	@PUT
