@@ -28,7 +28,7 @@ function populateEntityPage() {
     var mode = idMatches["mode"];
     
     var fields = getSchemaForEntity(entity);
-    var entities = getRecordsForEntity(entity);
+    var entities = getRecordForEntity(entity, id);
     
     for (var name in fields) {
         var element;
@@ -221,7 +221,7 @@ function populateGrid() {
     
     // Insert the top of the page header
     var headers = getHeadersForEntity(entity);
-    var entities = getRecordsForEntity(entity);
+    var entities = getRecordForEntity(entity);
     
     insertHeaderRow(headers, grid);
     
@@ -339,7 +339,7 @@ function getSchemaForEntity(entity) {
     return schema[entity];
 }
 
-function getRecordsForEntity(entity) {
+function getRecordForEntity(entity, id) {
     var entities = {
         "company": {
             "1": {
