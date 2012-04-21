@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
+import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -15,13 +17,20 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import jdbc.Attribute;
 import jdbc.CRMConnectionFailure;
+import jdbc.CRMExecutionException;
+import jdbc.Entity;
 import jdbc.JDBCController;
+import jdbc.JDBCLogic;
 
+import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
 @Path("/{entity}")
 public class Handler {
+	
+	private static final JDBCLogic logic = new JDBCLogic(); 
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -57,11 +66,22 @@ public class Handler {
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getEntity(@PathParam("entity") String entity,
-			@PathParam("id") String id) {
+	public JSONObject getEntity(@PathParam("entity") String entity,
+			@PathParam("id") String id) throws JSONException, CRMExecutionException, CRMConnectionFailure {
 
+		final HashMap<String, String> map = new HashMap<String, String>();
+		map.put("id", id);
 		
+		final List<Entity> result = logic.fetchCompany(map);
 		
+		final Entity entityResult = result.get(0);
+		final JSONObject jsonForEntity = new JSONObject();
+		
+		for(final Attribute a: entityResult.getAttributes()) {
+			jsonForEntity.put(a.getName(), a.getValue());
+		}
+		
+		return jsonForEntity;
 	}
 
 	@PUT
@@ -70,7 +90,7 @@ public class Handler {
 	@Produces(MediaType.APPLICATION_JSON)
 	public String updateEntity(@PathParam("entity") String entity,
 			@PathParam("id") String id, JSONObject putJson) {
-		return "entity: " + entity + "\nid: " + id;
+		return "put entity: " + entity + "\nid: " + id;
 	}
 
 	@DELETE
@@ -78,7 +98,7 @@ public class Handler {
 	@Produces(MediaType.APPLICATION_JSON)
 	public String deleteEntity(@PathParam("entity") String entity,
 			@PathParam("id") String id) {
-		return "entity: " + entity + "\nid: " + id;
+		return "delete entity: " + entity + "\nid: " + id;
 	}
 
 }
