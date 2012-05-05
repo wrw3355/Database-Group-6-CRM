@@ -12,7 +12,6 @@ CREATE TABLE "Company" (
 CREATE TABLE "Lead" (
     id int NOT NULL,
     description varchar(255) NOT NULL,
-    create_date varchar(255) NOT NULL,
     source varchar(255) NOT NULL,
     PRIMARY KEY (id)
 )
