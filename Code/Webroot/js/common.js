@@ -82,6 +82,7 @@ function populateEntityPage() {
 }
 
 function populateMenu() {
+
     var menu = getEntitiesWithText();
     var list = $("#top-options");
     
@@ -221,7 +222,7 @@ function populateGrid() {
     
     // Insert the top of the page header
     var headers = getHeadersForEntity(entity);
-    var entities = getRecordForEntity(entity);
+    var entities = getRecordForEntity(toTitleCase(entity), "");
     
     insertHeaderRow(headers, grid);
     
@@ -321,35 +322,34 @@ function insertHeaderRow(headers, grid) {
 }
 
 function getSchemaForEntity(entity) {
-    var schema = {
-        "company": {
-            "name": TYPE_TEXT,
-            "address": TYPE_TEXT,
-            "type": TYPE_TEXT,
-            "email": TYPE_TEXT,
-            "phone": TYPE_TEXT
-        }
-    }
-    
-    if (typeof schema[entity] == "undefined") {
-        alert("This entity is not supported in this phase.");
-        return null;
-    }
-    
-    return schema[entity];
-}
-
-function getRecordForEntity(entity, id) {
-    var result;
-    $.ajax(
+    /*$.ajax({
         type: "GET",
-        url: "http://localhost:8080/DatabaseConceptsServer/rest/" + entity + "/" + id, 
+        url: "http://localhost:8080/DatabaseConceptsServer/rest/Schema" + "/" + entity, 
         dataType: 'json',
         async: false,
         success: function(data) {
             result = data;
         }
-    );
+    });*/
+    
+    if (typeof result == "undefined") {
+        alert("This entity is not supported in this phase.");
+        return null;
+    }
+    
+    return result;
+}
+
+function getRecordForEntity(entity, id) {
+    var result;
+    $.ajax({
+        url: "http://localhost:8080/DatabaseConceptsServer/rest/" + entity + "/1", 
+        type: "GET",
+        async: false,
+        success: function(data) {
+            alert(data);
+        }
+    });
     
     if (typeof result == "undefined") {
         alert("This entity is not supported in this phase.");

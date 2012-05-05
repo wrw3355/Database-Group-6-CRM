@@ -1,9 +1,5 @@
 package requesthandler;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.HashMap;
 import java.util.List;
 
@@ -21,7 +17,6 @@ import jdbc.Attribute;
 import jdbc.CRMConnectionFailure;
 import jdbc.CRMExecutionException;
 import jdbc.Entity;
-import jdbc.JDBCController;
 import jdbc.JDBCLogic;
 
 import org.codehaus.jettison.json.JSONException;
@@ -30,29 +25,29 @@ import org.codehaus.jettison.json.JSONObject;
 @Path("/{entity}")
 public class Handler {
 	
-	private static final JDBCLogic logic = new JDBCLogic(); 
+	private static final JDBCLogic logic = new JDBCLogic();
+	private static final String SCHEMA_ENTITY = "Schema";
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getEntities(@PathParam("entity") String entity) {
-		try {
-			Connection conn = JDBCController.getConnection("CRM");
-			Statement st = conn.createStatement();
-			st.execute("SELECT * FROM Company");
-			ResultSet resultSet = st.getResultSet();
-			StringBuilder names = new StringBuilder();
-			while (resultSet.next()) {
-				names.append(resultSet.getString("name") + "\n");
+	public String getEntities(@PathParam("entity") String entity) throws CRMExecutionException, CRMConnectionFailure, JSONException {
+		final HashMap<String, String> map = new HashMap<String, String>();
+		map.put("id", null);
+		
+		final List<Entity> result = logic.fetchCompany(map);
+		
+		final JSONObject jsonForEntity = new JSONObject();
+		
+		for(final Entity entityResult: result) {
+			
+			final JSONObject singleEntity = new JSONObject();
+			for(final Attribute a: entityResult.getAttributes()) {
+				singleEntity.put(a.getName(), a.getValue());
 			}
-			return names.toString();
-		} catch (CRMConnectionFailure e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			jsonForEntity.put(singleEntity.getString("id"), singleEntity);
 		}
-		return "entity: " + entity;
+		
+		return jsonForEntity.toString();
 	}
 
 	@POST
@@ -66,8 +61,30 @@ public class Handler {
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public JSONObject getEntity(@PathParam("entity") String entity,
-			@PathParam("id") String id) throws JSONException, CRMExecutionException, CRMConnectionFailure {
+	public String handleGet(@PathParam("entity") String entity,
+			@PathParam("id") String id) throws CRMExecutionException, CRMConnectionFailure, JSONException {
+		if (entity.equals(SCHEMA_ENTITY)) {
+			return getSchema(id);
+		}
+		else {
+			return getEntity(entity, id);
+		}
+	}
+	
+	private String getSchema(final String entityName) throws CRMExecutionException, CRMConnectionFailure, JSONException {
+		final HashMap<String, String> schema = logic.getSchemaDataForEntity(entityName);
+		
+		final JSONObject schemaJSON = new JSONObject();
+		
+		for(final String key: schema.keySet()) {
+			schemaJSON.put(key, schema.get(key));
+		}
+		
+		return schemaJSON.toString();
+		
+	}
+	
+	private String getEntity(final String entity, final String id) throws JSONException, CRMExecutionException, CRMConnectionFailure {
 
 		final HashMap<String, String> map = new HashMap<String, String>();
 		map.put("id", id);
@@ -81,7 +98,7 @@ public class Handler {
 			jsonForEntity.put(a.getName(), a.getValue());
 		}
 		
-		return jsonForEntity;
+		return jsonForEntity.toString();
 	}
 
 	@PUT

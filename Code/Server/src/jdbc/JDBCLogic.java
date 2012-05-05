@@ -102,7 +102,7 @@ public class JDBCLogic {
     private String generateSelectQuery(final HashMap<String, String> record, final String entityName) {
     	String whereClause = "";
     	
-    	if(record.containsKey(ID_COLUMN)) {
+    	if(record.containsKey(ID_COLUMN) && record.get(ID_COLUMN) != null) {
     		whereClause = "id=" + record.get(ID_COLUMN) + ";";
     	}
     	else {
@@ -214,7 +214,7 @@ public class JDBCLogic {
      * @throws CRMExecutionException
      * @throws CRMConnectionFailure
      */
-    private HashMap<String, String> getSchemaDataForEntity(final String entityName) throws CRMExecutionException, CRMConnectionFailure {
+    public HashMap<String, String> getSchemaDataForEntity(final String entityName) throws CRMExecutionException, CRMConnectionFailure {
     	final Connection conn = JDBCController.getSchemaConnection();
 		
 		try {
