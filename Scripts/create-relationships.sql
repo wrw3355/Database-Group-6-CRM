@@ -25,8 +25,8 @@ CREATE TABLE "lead_becomes" (
     opportunity_id int NOT NULL,
     create_date date NOT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (lead_id) REFERENCES Lead(id),
-    FOREIGN KEY (opportunity_id) REFERENCES Opportunity(id)
+    FOREIGN KEY (lead_id) REFERENCES "Lead"(id),
+    FOREIGN KEY (opportunity_id) REFERENCES "Opportunity"(id)
 )
 
 CREATE TABLE "opportunity_requests" (
@@ -35,8 +35,8 @@ CREATE TABLE "opportunity_requests" (
     quote_id int NOT NULL,
     create_date date NOT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (opportunity_id) REFERENCES Opportunity(id),
-    FOREIGN KEY (quote_id) REFERENCES Quote(id)
+    FOREIGN KEY (opportunity_id) REFERENCES "Opportunity"(id),
+    FOREIGN KEY (quote_id) REFERENCES "Quote"(id)
 )
 
 CREATE TABLE "quote_consists_of" (
@@ -45,8 +45,8 @@ CREATE TABLE "quote_consists_of" (
     product_id int NOT NULL,
     quantity int NOT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (quote_id) REFERENCES Quote(id),
-    FOREIGN KEY (product_id) REFERENCES Product(id)
+    FOREIGN KEY (quote_id) REFERENCES "Quote"(id),
+    FOREIGN KEY (product_id) REFERENCES "Product"(id)
 )
 
 CREATE TABLE "quote_becomes" (
@@ -55,8 +55,8 @@ CREATE TABLE "quote_becomes" (
     order_id int NOT NULL,
     create_date date NOT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (quote_id) REFERENCES Quote(id),
-    FOREIGN KEY (order_id) REFERENCES Order(id)
+    FOREIGN KEY (quote_id) REFERENCES "Quote"(id),
+    FOREIGN KEY (order_id) REFERENCES "Order"(id)
 )
 
 CREATE TABLE "quote_priced_with" (
@@ -64,8 +64,8 @@ CREATE TABLE "quote_priced_with" (
     quote_id int NOT NULL,
     currency_id int NOT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (quote_id) REFERENCES Quote(id),
-    FOREIGN KEY (currency_id) REFERENCES Currency(id)
+    FOREIGN KEY (quote_id) REFERENCES "Quote"(id),
+    FOREIGN KEY (currency_id) REFERENCES "Currency"(id)
 )
 
 CREATE TABLE "order_priced_with" (
@@ -73,8 +73,8 @@ CREATE TABLE "order_priced_with" (
     order_id int NOT NULL,
     currency_id int NOT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (order_id) REFERENCES Order(id),
-    FOREIGN KEY (currency_id) REFERENCES Currency(id)
+    FOREIGN KEY (order_id) REFERENCES "Order"(id),
+    FOREIGN KEY (currency_id) REFERENCES "Currency"(id)
 )
 
 CREATE TABLE "currency_converts_to" (
@@ -82,6 +82,6 @@ CREATE TABLE "currency_converts_to" (
     from_currency_id int NOT NULL,
     to_currency_id int NOT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (from_currency_id) REFERENCES Currency(id),
-    FOREIGN KEY (to_currency_id) REFERENCES Currency(id)
+    FOREIGN KEY (from_currency_id) REFERENCES "Currency"(id),
+    FOREIGN KEY (to_currency_id) REFERENCES "Currency"(id)
 )
