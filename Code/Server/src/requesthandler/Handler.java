@@ -47,6 +47,8 @@ public class Handler {
 			jsonForEntity.put(singleEntity.getString("id"), singleEntity);
 		}
 		
+		
+		
 		return jsonForEntity.toString();
 	}
 
@@ -71,8 +73,11 @@ public class Handler {
 		}
 	}
 	
-	private String getSchema(final String entityName) throws CRMExecutionException, CRMConnectionFailure, JSONException {
-		final HashMap<String, String> schema = logic.getSchemaDataForEntity(entityName);
+	@GET
+	@Path("/Schema/{entity}")
+	@Produces(MediaType.APPLICATION_JSON)
+	private String getSchema(@PathParam("entity") String entity) throws CRMExecutionException, CRMConnectionFailure, JSONException {
+		final HashMap<String, String> schema = logic.getSchemaDataForEntity(entity);
 		
 		final JSONObject schemaJSON = new JSONObject();
 		

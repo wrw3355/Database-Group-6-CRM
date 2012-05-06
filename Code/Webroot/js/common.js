@@ -6,8 +6,8 @@ var MODE_VIEW = "view";
 var MODE_EDIT = "edit";
 var MODE_DELETE = "delete";
 
-var TYPE_TEXT = TYPE_TEXT;
-var TYPE_DATE = TYPE_DATE;
+var TYPE_TEXT = "varchar";
+var TYPE_DATE = "date";
 
 
 function initEntityPage() {
@@ -30,11 +30,10 @@ function populateEntityPage() {
     var fields = getSchemaForEntity(entity);
     var entities = getRecordForEntity(entity, id);
     
-    for (var name in fields) {
-        var element;
-
+    for (name in fields) {
+        var element = "";
+        var label = $("<label/>");
         if(fields[name] == TYPE_TEXT) {
-            var label = $("<label/>");
             label.attr("for", name);
             label.html(toTitleCase(name) + ": ");
             
@@ -45,12 +44,12 @@ function populateEntityPage() {
                 element.attr("id", name);
                 
                 if(mode == MODE_EDIT) {
-                    if(typeof entities[id] == "undefined" || entities[id] == null) {
+                    if(typeof entities == "undefined" || entities == null) {
                         alert("A record with the id '" + id + "' does not exist.");
                         return;
                     }
                     
-                    var value = entities[id][name]["value"];
+                    var value = entities[name];
                     element.attr("value", value);
                 }
             }
@@ -59,12 +58,12 @@ function populateEntityPage() {
                 element.attr("class", "attributeText");
                 element.attr("id", name);
                 
-                if(typeof entities[id] == "undefined" || entities[id] == null) {
+                if(typeof entities == "undefined" || entities == null) {
                     alert("A record with the id '" + id + "' does not exist.");
                     return;
                 }
                 
-                var value = entities[id][name]["value"];
+                var value = entities[name];
                 element.html(value);
             }
         }
@@ -255,11 +254,11 @@ function populateGrid() {
         checkboxCol.append(checkbox);
         row.append(checkboxCol);
         
-        
         for (var key in headers) {
             var content = $("<td/>");
             content.attr("id", id);
-            content.html(entities[id][headers[key]]["value"]);
+            
+            content.html(entities[id][headers[key]]/*["value"]*/);
             
             content.click(function() {
                 // Issue with JavaScript closures
@@ -322,15 +321,15 @@ function insertHeaderRow(headers, grid) {
 }
 
 function getSchemaForEntity(entity) {
-    /*$.ajax({
+    $.ajax({
         type: "GET",
-        url: "http://localhost:8080/DatabaseConceptsServer/rest/Schema" + "/" + entity, 
+        url: "http://localhost:8080/DatabaseConceptsServer/rest/Schema/" + toTitleCase(entity), 
         dataType: 'json',
         async: false,
         success: function(data) {
             result = data;
         }
-    });*/
+    });
     
     if (typeof result == "undefined") {
         alert("This entity is not supported in this phase.");
@@ -343,11 +342,11 @@ function getSchemaForEntity(entity) {
 function getRecordForEntity(entity, id) {
     var result;
     $.ajax({
-        url: "http://localhost:8080/DatabaseConceptsServer/rest/" + entity + "/1", 
+        url: "http://localhost:8080/DatabaseConceptsServer/rest/" + toTitleCase(entity) + "/" + id, 
         type: "GET",
         async: false,
         success: function(data) {
-            alert(data);
+            result = data;
         }
     });
     
