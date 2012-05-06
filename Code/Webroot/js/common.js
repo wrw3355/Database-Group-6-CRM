@@ -28,7 +28,10 @@ function populateEntityPage() {
     var mode = idMatches["mode"];
     
     var fields = getSchemaForEntity(entity);
-    var entities = getRecordForEntity(entity, id);
+    
+    if (mode != MODE_CREATE) {
+    	var entities = getRecordForEntity(entity, id);
+    }
     
     for (name in fields) {
         var element = "";
