@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
+
 /**
  * Contains the logic used to generate SQL queries and execute them
  * by using an existing connection to the database. This class operates
@@ -64,10 +67,18 @@ public class JDBCLogic {
      * 		A mapping of attributes to values for the company record.
      * @throws CRMExecutionException
      * @throws CRMConnectionFailure
+     * @throws JSONException 
+     * @throws SQLException 
      */
-    public void insertCompany(final HashMap<String, String> companyRecord) throws CRMExecutionException, CRMConnectionFailure {
+    public JSONObject insertCompany(final HashMap<String, String> companyRecord) throws CRMExecutionException, CRMConnectionFailure, JSONException, SQLException {
 		final String insertSQL = generateInsertStatement(companyRecord, "Company");
-		executeSQL(insertSQL, CRM_DATABASE, true, "Company");
+		final List<Entity> resultingValues = executeSQL(insertSQL, CRM_DATABASE, true, "Company");
+		
+		
+		final JSONObject result = new JSONObject();
+		result.put("id", resultingValues.get(0).getId());
+		
+		return result;
 	}
     
     /**
@@ -137,14 +148,14 @@ public class JDBCLogic {
                 continue;
             }
             
-            sqlStatement.append(attribute + "=" + record.get(attribute) + ", ");
+            sqlStatement.append(attribute + "='" + record.get(attribute) + "', ");
         }
         
         // Remove the ending , added to the String
         sqlStatement.deleteCharAt(sqlStatement.length() - 1);
         sqlStatement.deleteCharAt(sqlStatement.length() - 1);
         
-        sqlStatement.append("WHERE id=" + record.get(ID_COLUMN) + ";");
+        sqlStatement.append(" WHERE id=" + record.get(ID_COLUMN) + ";");
         
         return sqlStatement.toString();
     }
@@ -160,18 +171,16 @@ public class JDBCLogic {
      * 
      * @return
      * 		A SQL query to create the given record.
+     * @throws CRMConnectionFailure 
+     * @throws SQLException 
      */
-    private String generateInsertStatement(final HashMap<String, String> record, final String entityName) {
+    private String generateInsertStatement(final HashMap<String, String> record, final String entityName) throws CRMConnectionFailure, SQLException {
         final StringBuilder attributesBuilder = new StringBuilder();
         final StringBuilder valuesBuilder = new StringBuilder();
         
-        //final typesFor
-        
         for (final String attribute: record.keySet()) {
-            attributesBuilder.append("'" + attribute + "', ");
-            
-            
-            valuesBuilder.append(record.get(attribute) + ", ");
+            attributesBuilder.append(attribute + ", ");
+            valuesBuilder.append("\"" + record.get(attribute) + "\", ");
         }
         
         // Remove the ending , added to the String
@@ -181,7 +190,7 @@ public class JDBCLogic {
         // Remove the ending , added to the String
         valuesBuilder.deleteCharAt(valuesBuilder.length() - 1);
         valuesBuilder.deleteCharAt(valuesBuilder.length() - 1);
-        
+                
         return "INSERT INTO " + entityName + " (" + attributesBuilder.toString() + ") VALUES (" +
                valuesBuilder.toString() + ");";
         
@@ -294,7 +303,21 @@ public class JDBCLogic {
 		    final Statement st = conn.createStatement();
 		    
 		    if (manipulation) {
-		    	final int result = st.executeUpdate(query);
+		        System.err.println(query);
+		    	final int sqlResultValue = st.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
+		    	
+		    	// Because the id column is auto-generated, we need to capture it
+		    	// from this result set, if it's an insert. Otherwise it will be
+		    	// ignored.
+		    	final ResultSet generatedKeys = st.getGeneratedKeys();
+		    	
+		    	final List<Entity> resultList = new ArrayList<Entity>();
+		    	while(generatedKeys.next()) {
+		    	    final String id = generatedKeys.getString(1);
+		    	    resultList.add(new Entity("Company", id, null));
+		    	}
+		    	
+		    	return resultList;
 		    }
 		    else {
 		    	final ResultSet results = st.executeQuery(query);
@@ -332,7 +355,5 @@ public class JDBCLogic {
 		catch (final SQLException se) {
 		    throw new CRMExecutionException("Unable to execute the query: (" + query + ") because of an exception.", se);
 		}
-		
-		return null;
     }
 }

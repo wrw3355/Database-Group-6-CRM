@@ -169,12 +169,15 @@ function populateEntityMenu() {
         var saveButton = $("<li/>");
         saveButton.html("Save");
         saveButton.click(function() {
-            if(mode == MODE_CREATE) {
-                // TODO: Commit to database, get an id back
+        	var jsonRecordString = getJSONFromForm();
+        	
+            if(mode == MODE_CREATE) {                
+                createEntity(jsonRecordString, entity);
+                
             }
             else if(mode == MODE_EDIT) {
                 // TODO: Commit to database
-                window.location = "entityPage.html?id=" + id + "&entity=" + entity + "&mode=view";
+            	updateEntity(entity, jsonRecordString, id);
             }
         });
         
@@ -305,6 +308,16 @@ function getHeadersForEntity(entity) {
     }
 }
 
+function getJSONFromForm() {
+	var inputs = $("#entity > input[type='text']");
+    var record = {};
+    inputs.each(function() {
+    	record[this.id] = this.value;
+    });
+    
+    return JSON.stringify(record);
+}
+
 function insertHeaderRow(headers, grid) {
     var headerRow = $("<tr/>");
     headerRow.attr("id", "headerRow");
@@ -340,6 +353,34 @@ function getSchemaForEntity(entity) {
     }
     
     return result;
+}
+
+function createEntity(entity, json) {
+	$.ajax({
+        type: "POST",
+        url: "http://localhost:8080/DatabaseConceptsServer/rest/" + entity,
+        data: json,
+        contentType:"application/x-www-form-urlencoded; charset=utf-8",
+        dataType:"json",
+        async: false,
+        success: function(data) {
+            window.location = "entityPage.html?id=" + data.id + "&entity=" + entity + "&mode=view";
+        }
+    });
+}
+
+function updateEntity(entity, json, id) {
+	$.ajax({
+        type: "PUT",
+        url: "http://localhost:8080/DatabaseConceptsServer/rest/" + entity + "/" + id,
+        data: json,
+        contentType:"application/x-www-form-urlencoded; charset=utf-8",
+        dataType:"json",
+        async: false,
+        success: function(data) {
+            window.location = "entityPage.html?id=" + id + "&entity=" + entity + "&mode=view";
+        }
+    });
 }
 
 function getRecordForEntity(entity, id) {

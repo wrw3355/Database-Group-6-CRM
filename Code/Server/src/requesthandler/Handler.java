@@ -1,6 +1,10 @@
 package requesthandler;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -53,13 +57,44 @@ public class Handler {
 	}
 
 	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public String createEntity(@PathParam("entity") String entity,
-			JSONObject postJson) {
-		return "entity: " + entity;
-	}
-
+    @Consumes("application/x-www-form-urlencoded")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String createEntity(String json, @PathParam("entity") String entityName) throws JSONException, CRMExecutionException, CRMConnectionFailure, SQLException, UnsupportedEncodingException {
+        final JSONObject record = new JSONObject(URLDecoder.decode(json, "UTF-8"));
+        final HashMap<String, String> entityRecord = new HashMap<String, String>();
+        
+        for(final Iterator iter = record.keys(); iter.hasNext();) {
+            String key = (String)iter.next();
+            entityRecord.put(key, record.getString(key));
+        }
+        
+        System.err.println("Inserting company!");
+        
+        return logic.insertCompany(entityRecord).toString();
+    }
+	
+	@PUT
+	@Path("/{id}")
+    @Consumes("application/x-www-form-urlencoded")
+    @Produces(MediaType.APPLICATION_JSON)
+    public void updateEntity(String json, @PathParam("entity") String entityName, @PathParam("id") String id) 
+            throws JSONException, CRMExecutionException, CRMConnectionFailure, SQLException, UnsupportedEncodingException {
+        final JSONObject record = new JSONObject(URLDecoder.decode(json, "UTF-8"));
+        final HashMap<String, String> entityRecord = new HashMap<String, String>();
+            
+        for(final Iterator iter = record.keys(); iter.hasNext();) {
+            String key = (String)iter.next();
+            entityRecord.put(key, record.getString(key));
+        }
+        
+        // The id is not passed in the JSON
+        entityRecord.put("id", id);
+        
+        System.err.println("Inserting company!");
+        
+        logic.updateCompany(entityRecord);
+    }
+	
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -108,7 +143,6 @@ public class Handler {
 
 	@PUT
 	@Path("/{id}")
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public String updateEntity(@PathParam("entity") String entity,
 			@PathParam("id") String id, JSONObject putJson) {
