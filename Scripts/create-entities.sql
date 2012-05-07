@@ -7,14 +7,14 @@ CREATE TABLE `Company` (
     email varchar(255) NOT NULL,
     phone varchar(255) NOT NULL,
     PRIMARY KEY (id)
-)
+);
 
 CREATE TABLE `Lead` (
     id int NOT NULL AUTO_INCREMENT,
     description varchar(255) NOT NULL,
     source varchar(255) NOT NULL,
     PRIMARY KEY (id)
-)
+);
 
 CREATE TABLE `Opportunity` (
     id int NOT NULL AUTO_INCREMENT,
@@ -24,7 +24,7 @@ CREATE TABLE `Opportunity` (
     open_date date NOT NULL,
     close_date date NOT NULL,
     PRIMARY KEY (id)
-)
+);
 
 CREATE TABLE `Quote` (
     id int NOT NULL AUTO_INCREMENT,
@@ -37,7 +37,7 @@ CREATE TABLE `Quote` (
     total_price double NOT NULL,
     ship_type varchar(255) NOT NULL,
     PRIMARY KEY (id)
-)
+);
 
 CREATE TABLE `Product` (
     id int NOT NULL AUTO_INCREMENT,
@@ -46,7 +46,7 @@ CREATE TABLE `Product` (
     product_type varchar(255) NOT NULL,
     price double NOT NULL,
     PRIMARY KEY (id)
-)
+);
 
 CREATE TABLE `Order` (
     id int NOT NULL AUTO_INCREMENT,
@@ -56,14 +56,14 @@ CREATE TABLE `Order` (
     close_type date NOT NULL,
     total_price double NOT NULL,
     PRIMARY KEY (id)
-)
+);
 
 CREATE TABLE `Currency` (
     id int NOT NULL AUTO_INCREMENT,
     name varchar(255) NOT NULL,
     isPrimary int(1) NOT NULL,
     PRIMARY KEY (id)
-)
+);
 
 CREATE TABLE `Product` (
     id int NOT NULL AUTO_INCREMENT,
@@ -72,4 +72,4 @@ CREATE TABLE `Product` (
     product_type varchar(255) NOT NULL,
     price double NOT NULL,
     PRIMARY KEY (id)
-)
+);
