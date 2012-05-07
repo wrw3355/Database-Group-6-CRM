@@ -9,6 +9,7 @@ var MODE_DELETE = "delete";
 var TYPE_TEXT = "varchar";
 var TYPE_DOUBLE = "double";
 var TYPE_DATE = "date";
+var TYPE_BOOLEAN = "tinyint";
 
 
 function initEntityPage() {
@@ -38,7 +39,8 @@ function populateEntityPage() {
     for (name in fields) {
         var element = "";
         var label = $("<label/>");
-        if(fields[name] == TYPE_TEXT || fields[name] == TYPE_DATE || fields[name] == TYPE_DOUBLE) {
+        if (fields[name] == TYPE_TEXT || fields[name] == TYPE_DATE 
+        		|| fields[name] == TYPE_DOUBLE) {
             label.attr("for", name);
             label.html(toTitleCase(name) + ": ");
             
@@ -48,8 +50,8 @@ function populateEntityPage() {
                 element.attr("type", "text");
                 element.attr("id", name);
                 
-                if(mode == MODE_EDIT) {
-                    if(typeof entities == "undefined" || entities == null) {
+                if (mode == MODE_EDIT) {
+                    if (typeof entities == "undefined" || entities == null) {
                         alert("A record with the id '" + id + "' does not exist.");
                         return;
                     }
@@ -58,7 +60,7 @@ function populateEntityPage() {
                     element.attr("value", value);
                 }
             }
-            else if(mode == MODE_VIEW) {                
+            else if (mode == MODE_VIEW) {
                 element = $("<div/>");
                 element.attr("class", "attributeText");
                 element.attr("id", name);
@@ -71,6 +73,33 @@ function populateEntityPage() {
                 var value = entities[name];
                 element.html(value);
             }
+        }
+        else if (fields[name] == TYPE_BOOLEAN) {
+        	label.attr("for", name);
+            label.html(toTitleCase(name) + ": ");
+            
+            element = $("<div/>");
+            element.attr("class", "checkboxContainer");
+            
+            var box = $("<input/>");
+            box.attr("type", "checkbox");
+            box.attr("id", name);
+            
+            if(mode == MODE_EDIT) {
+                if(typeof entities == "undefined" || entities == null) {
+                    alert("A record with the id '" + id + "' does not exist.");
+                    return;
+                }
+            }
+            
+            var value = entities[name];
+        	box.attr("checked", value == "1"); 
+            
+            if(mode == MODE_VIEW) {
+            	box.attr("disabled", true);
+            }
+            
+            element.append(box);
         }
         
         var separator = $("<br/>");
@@ -317,7 +346,7 @@ function toTitleCase(text) {
 function getHeadersForEntity(entity) {
 	var schema = getSchemaForEntity(entity);
 	
-	if ("Name" in schema) {
+	if ("name" in schema) {
 	    return {
 	        "Name": "name",
 	        "Date": "date"

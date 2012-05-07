@@ -212,6 +212,12 @@ label {
     padding: 2px;
 }
 
+#entity .checkboxContainer {
+	width: 200px;
+	padding: 8px 4px 4px 4px;
+}
+
+
 #entity input, .attributeText {
     margin: 10px 0px;
     height: auto;
