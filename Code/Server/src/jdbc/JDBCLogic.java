@@ -148,7 +148,7 @@ public class JDBCLogic {
     private String generateUpdateQuery(final HashMap<String, String> record, final String entityName) 
             throws CRMExecutionException {
             
-        StringBuilder sqlStatement = new StringBuilder("UPDATE `" + entityName + "` SET ");
+        final StringBuilder sqlStatement = new StringBuilder("UPDATE `" + entityName + "` SET ");
         for (final String attribute: record.keySet()) {
             if (attribute.equals("id")) {
                 continue;
