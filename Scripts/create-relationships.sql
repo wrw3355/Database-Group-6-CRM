@@ -1,6 +1,6 @@
 /* Relationships */
 CREATE TABLE "company_quoted" (
-    id int NOT NULL,
+    id int NOT NULL AUTO_INCREMENT,
     company_id int NOT NULL,
     quote_id int NOT NULL,
     ship_to_address varchar(255) NOT NULL,
@@ -10,7 +10,7 @@ CREATE TABLE "company_quoted" (
 )
 
 CREATE TABLE "company_gets" (
-    id int NOT NULL,
+    id int NOT NULL AUTO_INCREMENT,
     company_id int NOT NULL,
     lead_id int NOT NULL,
     create_date date NOT NULL,
@@ -20,7 +20,7 @@ CREATE TABLE "company_gets" (
 )
 
 CREATE TABLE "lead_becomes" (
-    id int NOT NULL,
+    id int NOT NULL AUTO_INCREMENT,
     lead_id int NOT NULL,
     opportunity_id int NOT NULL,
     create_date date NOT NULL,
@@ -30,7 +30,7 @@ CREATE TABLE "lead_becomes" (
 )
 
 CREATE TABLE "opportunity_requests" (
-    id int NOT NULL,
+    id int NOT NULL AUTO_INCREMENT,
     opportunity_id int NOT NULL,
     quote_id int NOT NULL,
     create_date date NOT NULL,
@@ -40,7 +40,7 @@ CREATE TABLE "opportunity_requests" (
 )
 
 CREATE TABLE "quote_consists_of" (
-    id int NOT NULL,
+    id int NOT NULL AUTO_INCREMENT,
     quote_id int NOT NULL,
     product_id int NOT NULL,
     quantity int NOT NULL,
@@ -50,7 +50,7 @@ CREATE TABLE "quote_consists_of" (
 )
 
 CREATE TABLE "quote_becomes" (
-    id int NOT NULL,
+    id int NOT NULL AUTO_INCREMENT,
     quote_id int NOT NULL,
     order_id int NOT NULL,
     create_date date NOT NULL,
@@ -60,7 +60,7 @@ CREATE TABLE "quote_becomes" (
 )
 
 CREATE TABLE "quote_priced_with" (
-    id int NOT NULL,
+    id int NOT NULL AUTO_INCREMENT,
     quote_id int NOT NULL,
     currency_id int NOT NULL,
     PRIMARY KEY (id),
@@ -69,7 +69,7 @@ CREATE TABLE "quote_priced_with" (
 )
 
 CREATE TABLE "order_priced_with" (
-    id int NOT NULL,
+    id int NOT NULL AUTO_INCREMENT,
     order_id int NOT NULL,
     currency_id int NOT NULL,
     PRIMARY KEY (id),
@@ -78,7 +78,7 @@ CREATE TABLE "order_priced_with" (
 )
 
 CREATE TABLE "currency_converts_to" (
-    id int NOT NULL,
+    id int NOT NULL AUTO_INCREMENT,
     from_currency_id int NOT NULL,
     to_currency_id int NOT NULL,
     PRIMARY KEY (id),

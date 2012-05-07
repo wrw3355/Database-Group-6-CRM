@@ -1,6 +1,6 @@
 /* Entities */
 CREATE TABLE "Company" (
-    id int NOT NULL,
+    id int NOT NULL AUTO_INCREMENT,
     name varchar(255) NOT NULL,
     address varchar(255) NOT NULL,
     company_type varchar(255) NOT NULL,
@@ -10,14 +10,14 @@ CREATE TABLE "Company" (
 )
 
 CREATE TABLE "Lead" (
-    id int NOT NULL,
+    id int NOT NULL AUTO_INCREMENT,
     description varchar(255) NOT NULL,
     source varchar(255) NOT NULL,
     PRIMARY KEY (id)
 )
 
 CREATE TABLE "Opportunity" (
-    id int NOT NULL,
+    id int NOT NULL AUTO_INCREMENT,
     description varchar(255) NOT NULL,
     win_percentage double NOT NULL,
     close_reason varchar(255) NOT NULL,
@@ -27,7 +27,7 @@ CREATE TABLE "Opportunity" (
 )
 
 CREATE TABLE "Quote" (
-    id int NOT NULL,
+    id int NOT NULL AUTO_INCREMENT,
     description varchar(255) NOT NULL,
     ship_from_address varchar(255) NOT NULL,
     discount double NOT NULL,
@@ -40,7 +40,7 @@ CREATE TABLE "Quote" (
 )
 
 CREATE TABLE "Product" (
-    id int NOT NULL,
+    id int NOT NULL AUTO_INCREMENT,
     name varchar(255) NOT NULL,
     description varchar(255) NOT NULL,
     product_type varchar(255) NOT NULL,
@@ -49,7 +49,7 @@ CREATE TABLE "Product" (
 )
 
 CREATE TABLE "Order" (
-    id int NOT NULL,
+    id int NOT NULL AUTO_INCREMENT,
     description varchar(255) NOT NULL,
     ship_from_address varchar(255) NOT NULL,
     ship_type varchar(255) NOT NULL,
@@ -59,14 +59,14 @@ CREATE TABLE "Order" (
 )
 
 CREATE TABLE "Currency" (
-    id int NOT NULL,
+    id int NOT NULL AUTO_INCREMENT,
     name varchar(255) NOT NULL,
     isPrimary int(1) NOT NULL,
     PRIMARY KEY (id)
 )
 
 CREATE TABLE "Product" (
-    id int NOT NULL,
+    id int NOT NULL AUTO_INCREMENT,
     name varchar(255) NOT NULL,
     description varchar(255) NOT NULL,
     product_type varchar(255) NOT NULL,
