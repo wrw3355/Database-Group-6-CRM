@@ -25,6 +25,8 @@ public class JDBCLogic {
     private static final String ID_COLUMN = "id";
     private static final String CRM_DATABASE = "CRM";
     
+    private static final String BOOLEAN_PREFIX = "is";
+    
     /**
      * Fetches a list of entities from the database based on the given record.
      * Fetches all records for the given type if the companyRecord HashMap does
@@ -152,7 +154,12 @@ public class JDBCLogic {
                 continue;
             }
             
-            sqlStatement.append(attribute + "='" + record.get(attribute) + "', ");
+            if (attribute.startsWith(BOOLEAN_PREFIX)) {
+                sqlStatement.append(attribute + "=" + record.get(attribute) + ", ");
+            }
+            else {
+                sqlStatement.append(attribute + "='" + record.get(attribute) + "', ");
+            }
         }
         
         // Remove the ending , added to the String
@@ -184,7 +191,13 @@ public class JDBCLogic {
         
         for (final String attribute: record.keySet()) {
             attributesBuilder.append(attribute + ", ");
-            valuesBuilder.append("\"" + record.get(attribute) + "\", ");
+            
+            if (attribute.startsWith(BOOLEAN_PREFIX)) {
+                valuesBuilder.append(record.get(attribute) + ", ");   
+            }
+            else {
+                valuesBuilder.append("\"" + record.get(attribute) + "\", ");
+            }
         }
         
         // Remove the ending , added to the String

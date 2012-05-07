@@ -381,10 +381,15 @@ function validateForm() {
 }
 
 function getJSONFromForm() {
-	var inputs = $("#entity > input[type='text']");
+	var inputs = $("input");
     var record = {};
     inputs.each(function() {
-    	record[this.id] = this.value;
+    	if (this.type == "checkbox") {
+    		record[this.id] = this.checked;
+    	}
+    	else {
+    		record[this.id] = this.value;
+    	}
     });
     
     return JSON.stringify(record);
