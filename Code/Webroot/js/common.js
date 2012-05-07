@@ -30,8 +30,9 @@ function populateEntityPage() {
     
     var fields = getSchemaForEntity(entity);
     
+    var entities = {};
     if (mode != MODE_CREATE) {
-    	var entities = getRecordForEntity(entity, id);
+    	entities = getRecordForEntity(entity, id);
     }
     
     for (name in fields) {
@@ -311,7 +312,7 @@ function getHeadersForEntity(entity) {
     return {
         "Name": "name",
         "Date": "date"
-    }
+    };
 }
 
 function getJSONFromForm() {
@@ -321,6 +322,8 @@ function getJSONFromForm() {
     	record[this.id] = this.value;
     });
     
+    alert(JSON.stringify(record));
+    
     return JSON.stringify(record);
 }
 
@@ -329,7 +332,7 @@ function insertHeaderRow(headers, grid) {
     headerRow.attr("id", "headerRow");
     
     var checkboxCol = $("<td/>");
-    headerRow.append(checkboxCol)
+    headerRow.append(checkboxCol);
     
     for (var text in headers) {
         
