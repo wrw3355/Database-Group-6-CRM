@@ -125,7 +125,7 @@ public class JDBCLogic {
     		whereClause = "1";
     	}
     	
-        return "SELECT * FROM " + entityName + " WHERE " + whereClause;
+        return "SELECT * FROM `" + entityName + "` WHERE " + whereClause;
     }
 
     /**
@@ -146,7 +146,7 @@ public class JDBCLogic {
     private String generateUpdateQuery(final HashMap<String, String> record, final String entityName) 
             throws CRMExecutionException {
             
-        StringBuilder sqlStatement = new StringBuilder("UPDATE " + entityName + " SET ");
+        StringBuilder sqlStatement = new StringBuilder("UPDATE `" + entityName + "` SET ");
         for (final String attribute: record.keySet()) {
             if (attribute.equals("id")) {
                 continue;
@@ -195,7 +195,7 @@ public class JDBCLogic {
         valuesBuilder.deleteCharAt(valuesBuilder.length() - 1);
         valuesBuilder.deleteCharAt(valuesBuilder.length() - 1);
                 
-        return "INSERT INTO " + entityName + " (" + attributesBuilder.toString() + ") VALUES (" +
+        return "INSERT INTO `" + entityName + "` (" + attributesBuilder.toString() + ") VALUES (" +
                valuesBuilder.toString() + ");";
         
     }
@@ -213,7 +213,7 @@ public class JDBCLogic {
      * 		A SQL query to delete the given record.
      */
     private String generateDeleteStatement(final HashMap<String, String> record, final String entityName) {
-        return "DELETE FROM " + entityName + " WHERE id=" + record.get(ID_COLUMN) + ";";
+        return "DELETE FROM `" + entityName + "` WHERE id=" + record.get(ID_COLUMN) + ";";
     }
     
     /**

@@ -61,7 +61,7 @@ CREATE TABLE `Order` (
 CREATE TABLE `Currency` (
     id int NOT NULL AUTO_INCREMENT,
     name varchar(255) NOT NULL,
-    isPrimary int(1) NOT NULL,
+    isPrimary tinyint(1) NOT NULL,
     PRIMARY KEY (id)
 );
 
