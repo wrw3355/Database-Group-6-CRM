@@ -207,9 +207,15 @@ label {
     width: 100px;
 }
 
-#entity input[type=text] {
+#entity input[type=text],
+#entity select {
     width: 300px;
     padding: 2px;
+    border: 1px solid #000;
+}
+
+#entity select {
+	margin-top: 12px;
 }
 
 #entity .checkboxContainer {

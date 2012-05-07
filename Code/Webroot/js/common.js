@@ -112,6 +112,24 @@ function populateEntityPage() {
         entityForm.append(clear);
         entityForm.append(separator);
     }
+    
+    if (entity == "Lead") {
+    	insertExternalReference("company");
+    }
+    else if (entity == "Opportunity") {
+    	insertExternalReference("lead");
+    }
+    else if (entity == "Quote") {
+    	insertExternalReference("opportunity");
+    }
+    else if (entity == "Order") {
+    	insertExternalReference("quote");
+    }
+    
+    if ($("#external").length > 0 && mode == MODE_VIEW) {
+    	$("#external").attr("disabled", true);
+    }
+    	
 }
 
 function populateMenu() {
@@ -359,6 +377,35 @@ function getHeadersForEntity(entity) {
 	}
 }
 
+function insertExternalReference(entity) {
+	var entities = getRecordForEntity(toTitleCase(entity), "");
+	
+	var select = $("<select/>");
+	select.attr("id", "external");
+	
+	for(id in entities) {
+		var option = $("<option/>");
+		
+		if("name" in entities[id]) {
+			option.html(entities[id]["name"]);
+			option.attr("value", entities[id]["name"]); 
+		}
+		else {
+			option.html(entities[id]["description"]);
+			option.attr("value", entities[id]["description"]);
+		}
+		
+		select.append(option);
+	}
+	
+	var label = $("<label/>");
+	label.attr("for", "external");
+	label.html(toTitleCase(entity) + ": ");
+
+	$("#entity").append(label);
+	$("#entity").append(select);
+}
+
 function validateForm() {
 	var inputs = $("#entity > input[type='text']");
 	var valid = true;
@@ -391,6 +438,8 @@ function getJSONFromForm() {
     		record[this.id] = this.value;
     	}
     });
+    
+    alert(JSON.stringify(record));
     
     return JSON.stringify(record);
 }
@@ -444,6 +493,10 @@ function createEntity(entity, json) {
             window.location = "entityPage.html?id=" + data.id + "&entity=" + entity + "&mode=view";
         }
     });
+	
+	if(entity == "Quote") {
+		
+	}
 }
 
 function updateEntity(entity, json, id) {
