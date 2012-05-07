@@ -112,6 +112,7 @@ function populateMenu() {
         createButton.html("Create " + toTitleCase(entity));
         createButton.click(function() {
             showModalEntityPage(entity, null, MODE_CREATE);
+            location.reload(true);
         });
         
         var editButton = $("<li/>");
@@ -126,6 +127,7 @@ function populateMenu() {
             
             checkboxes.each(function() {
                 showModalEntityPage(entity, this.value, MODE_EDIT);
+                location.reload(true);
             });
         });
         
@@ -173,11 +175,15 @@ function populateEntityMenu() {
         var saveButton = $("<li/>");
         saveButton.html("Save");
         saveButton.click(function() {
+        	if(!validateForm()) {
+        		alert("All fields are required.");
+        		return;
+        	}
+        	
         	var jsonRecordString = getJSONFromForm();
         	
             if(mode == MODE_CREATE) {                
-                createEntity(jsonRecordString, entity);
-                
+                createEntity(entity, jsonRecordString);
             }
             else if(mode == MODE_EDIT) {
                 // TODO: Commit to database
@@ -309,10 +315,40 @@ function toTitleCase(text) {
 }
 
 function getHeadersForEntity(entity) {
-    return {
-        "Name": "name",
-        "Date": "date"
-    };
+	var schema = getSchemaForEntity(entity);
+	
+	if ("Name" in schema) {
+	    return {
+	        "Name": "name",
+	        "Date": "date"
+	    };
+	}
+	else {
+		return {
+			"Description": "description"
+		};
+	}
+}
+
+function validateForm() {
+	var inputs = $("#entity > input[type='text']");
+	var valid = true;
+    inputs.each(function() {
+    	if($.trim(this.value) == "") {
+    		var label = $("#entity > label[for='" + this.id + "']");
+    		label.css("color", "#FF0000");
+    		$(this).css("border", "1px solid #FF0000");
+    		
+    		valid = false;
+    	}
+    	else {
+    		var label = $("#entity > label[for='" + this.id + "']");
+    		label.css("color", "#000");
+    		$(this).css("border", "1px solid #000");
+    	}
+    });
+    
+    return valid;
 }
 
 function getJSONFromForm() {
@@ -321,8 +357,6 @@ function getJSONFromForm() {
     inputs.each(function() {
     	record[this.id] = this.value;
     });
-    
-    alert(JSON.stringify(record));
     
     return JSON.stringify(record);
 }
