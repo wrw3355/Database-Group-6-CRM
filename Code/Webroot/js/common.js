@@ -7,6 +7,7 @@ var MODE_EDIT = "edit";
 var MODE_DELETE = "delete";
 
 var TYPE_TEXT = "varchar";
+var TYPE_DOUBLE = "double";
 var TYPE_DATE = "date";
 
 
@@ -36,7 +37,7 @@ function populateEntityPage() {
     for (name in fields) {
         var element = "";
         var label = $("<label/>");
-        if(fields[name] == TYPE_TEXT) {
+        if(fields[name] == TYPE_TEXT || fields[name] == TYPE_DATE || fields[name] == TYPE_DOUBLE) {
             label.attr("for", name);
             label.html(toTitleCase(name) + ": ");
             
