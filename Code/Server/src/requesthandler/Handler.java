@@ -34,11 +34,11 @@ public class Handler {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getEntities(@PathParam("entity") String entity) throws CRMExecutionException, CRMConnectionFailure, JSONException {
+	public String getEntities(@PathParam("entity") String entityName) throws CRMExecutionException, CRMConnectionFailure, JSONException {
 		final HashMap<String, String> map = new HashMap<String, String>();
 		map.put("id", null);
 		
-		final List<Entity> result = logic.fetchCompany(map);
+		final List<Entity> result = logic.fetchEntity(map, entityName);
 		
 		final JSONObject jsonForEntity = new JSONObject();
 		
@@ -68,9 +68,7 @@ public class Handler {
             entityRecord.put(key, record.getString(key));
         }
         
-        System.err.println("Inserting company!");
-        
-        return logic.insertCompany(entityRecord).toString();
+        return logic.insertEntity(entityRecord, entityName).toString();
     }
 	
 	@PUT
@@ -90,9 +88,22 @@ public class Handler {
         // The id is not passed in the JSON
         entityRecord.put("id", id);
         
-        System.err.println("Inserting company!");
+        logic.updateEntity(entityRecord, entityName);
+    }
+	
+	@DELETE
+    @Path("/{id}")
+    @Consumes("application/x-www-form-urlencoded")
+    @Produces(MediaType.APPLICATION_JSON)
+    public void deleteEntity(@PathParam("entity") String entityName, @PathParam("id") String id) 
+            throws JSONException, CRMExecutionException, CRMConnectionFailure, SQLException, UnsupportedEncodingException {
+	    
+        final HashMap<String, String> entityRecord = new HashMap<String, String>();
         
-        logic.updateCompany(entityRecord);
+        // The id is not passed in the JSON
+        entityRecord.put("id", id);
+        
+        logic.deleteEntity(entityRecord, entityName);
     }
 	
 	@GET
@@ -124,12 +135,12 @@ public class Handler {
 		
 	}
 	
-	private String getEntity(final String entity, final String id) throws JSONException, CRMExecutionException, CRMConnectionFailure {
+	private String getEntity(final String entityName, final String id) throws JSONException, CRMExecutionException, CRMConnectionFailure {
 
 		final HashMap<String, String> map = new HashMap<String, String>();
 		map.put("id", id);
 		
-		final List<Entity> result = logic.fetchCompany(map);
+		final List<Entity> result = logic.fetchEntity(map, entityName);
 		
 		final Entity entityResult = result.get(0);
 		final JSONObject jsonForEntity = new JSONObject();
@@ -140,21 +151,4 @@ public class Handler {
 		
 		return jsonForEntity.toString();
 	}
-
-	@PUT
-	@Path("/{id}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public String updateEntity(@PathParam("entity") String entity,
-			@PathParam("id") String id, JSONObject putJson) {
-		return "put entity: " + entity + "\nid: " + id;
-	}
-
-	@DELETE
-	@Path("/{id}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public String deleteEntity(@PathParam("entity") String entity,
-			@PathParam("id") String id) {
-		return "delete entity: " + entity + "\nid: " + id;
-	}
-
 }

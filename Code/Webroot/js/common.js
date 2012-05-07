@@ -104,7 +104,7 @@ function populateMenu() {
     var topNav = $("#top-nav > ul");
 
     if (idMatches != null) {
-        var entity = idMatches["entity"];
+        var entity = toTitleCase(idMatches["entity"]);
         
         var createButton = $("<li/>");
         createButton.html("Create " + toTitleCase(entity));
@@ -140,7 +140,9 @@ function populateMenu() {
             if(confirm("Are you sure you want to delete the selected records?")) {
                 checkboxes.each(function() {
                     // TODO: Delete from database
+                	deleteEntity(entity, this.value);
                 });
+                location.reload(true);
             }
             else {
                 return;
@@ -156,7 +158,7 @@ function populateMenu() {
 function populateEntityMenu() {
     var topNav = $("#top-nav > ul");
     var id = idMatches["id"];
-    var entity = idMatches["entity"];
+    var entity = toTitleCase(idMatches["entity"]);
     var mode = idMatches["mode"];
     
     if (idMatches != null) {        
@@ -186,6 +188,8 @@ function populateEntityMenu() {
         deleteButton.click(function() {
             if(confirm("Are you sure you want to delete this record?")) {
                 // TODO: Delete from database
+            	deleteEntity(entity, id);
+            	
                 window.close();
             }
             else {
@@ -217,7 +221,7 @@ function populateGrid() {
         return;
     }
     
-    var entity = idMatches["entity"];
+    var entity = toTitleCase(idMatches["entity"]);
     
     var pageName = getEntitiesWithText()[entity];
     var pageHeader = $("<h2/>");
@@ -232,7 +236,7 @@ function populateGrid() {
     insertHeaderRow(headers, grid);
     
     // Insert an error row if there are no entities of this type
-    if (typeof entities == "undefined" || entities == null || entities.length < 1) {
+    if (typeof entities == "undefined" || entities == null || $.isEmptyObject(entities)) {
         var errorRow = $("<tr/>");
         errorRow.attr("class", "noEntries");
         
@@ -268,6 +272,7 @@ function populateGrid() {
             
             content.click(function() {
                 // Issue with JavaScript closures
+            	location.reload(true);
                 return showModalEntityPage(entity, this.id, MODE_VIEW);
            });
             
@@ -379,6 +384,19 @@ function updateEntity(entity, json, id) {
         async: false,
         success: function(data) {
             window.location = "entityPage.html?id=" + id + "&entity=" + entity + "&mode=view";
+        }
+    });
+}
+
+function deleteEntity(entity, id) {
+	$.ajax({
+        type: "DELETE",
+        url: "http://localhost:8080/DatabaseConceptsServer/rest/" + entity + "/" + id,
+        contentType:"application/x-www-form-urlencoded; charset=utf-8",
+        dataType:"json",
+        async: false,
+        success: function(data) {
+        	return;
         }
     });
 }

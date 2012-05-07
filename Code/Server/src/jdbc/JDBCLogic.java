@@ -30,8 +30,9 @@ public class JDBCLogic {
      * Fetches all records for the given type if the companyRecord HashMap does
      * not contain an Id column.
      * 
-     * @param companyRecord
+     * @param entityRecord
      * 		The mapping of attributes to values for the record.
+     * @param entityName TODO
      * 
      * @return
      * 		A list of company entities matching the record.
@@ -39,40 +40,42 @@ public class JDBCLogic {
      * @throws CRMExecutionException
      * @throws CRMConnectionFailure
      */
-    public List<Entity> fetchCompany(final HashMap<String, String> companyRecord) throws CRMExecutionException, CRMConnectionFailure {
-    	final String selectSQL = generateSelectQuery(companyRecord, "Company");
-    	return executeSQL(selectSQL, CRM_DATABASE, false, "Company"); // TODO
+    public List<Entity> fetchEntity(final HashMap<String, String> entityRecord, String entityName) throws CRMExecutionException, CRMConnectionFailure {
+    	final String selectSQL = generateSelectQuery(entityRecord, entityName);
+    	return executeSQL(selectSQL, CRM_DATABASE, false, entityName);
     }
     
     /**
      * Updates a given company in the database with the attributes and
      * values specified in the record HashMap.
      * 
-     * @param companyRecord
+     * @param entityRecord
      * 		A mapping of attributes to values for the company record.
+     * @param entityName TODO
      * 
      * @throws CRMExecutionException
      * @throws CRMConnectionFailure
      */
-    public void updateCompany(final HashMap<String, String> companyRecord) throws CRMExecutionException, CRMConnectionFailure {
-        final String updateSQL = generateUpdateQuery(companyRecord, "Company");
-        executeSQL(updateSQL, CRM_DATABASE, true, "Company");
+    public void updateEntity(final HashMap<String, String> entityRecord, String entityName) throws CRMExecutionException, CRMConnectionFailure {
+        final String updateSQL = generateUpdateQuery(entityRecord, entityName);
+        executeSQL(updateSQL, CRM_DATABASE, true, entityName);
     }
     
     /**
      * Creates a new company in the database for the given HashMap of
      * attributes to values.
      * 
-     * @param companyRecord
+     * @param entityRecord
      * 		A mapping of attributes to values for the company record.
+     * @param entityName TODO
      * @throws CRMExecutionException
      * @throws CRMConnectionFailure
      * @throws JSONException 
      * @throws SQLException 
      */
-    public JSONObject insertCompany(final HashMap<String, String> companyRecord) throws CRMExecutionException, CRMConnectionFailure, JSONException, SQLException {
-		final String insertSQL = generateInsertStatement(companyRecord, "Company");
-		final List<Entity> resultingValues = executeSQL(insertSQL, CRM_DATABASE, true, "Company");
+    public JSONObject insertEntity(final HashMap<String, String> entityRecord, String entityName) throws CRMExecutionException, CRMConnectionFailure, JSONException, SQLException {
+		final String insertSQL = generateInsertStatement(entityRecord, entityName);
+		final List<Entity> resultingValues = executeSQL(insertSQL, CRM_DATABASE, true, entityName);
 		
 		
 		final JSONObject result = new JSONObject();
@@ -85,17 +88,18 @@ public class JDBCLogic {
      * Deletes a given record from the database with the values specified
      * in the HashMap.
      * 
-     * @param companyRecord
+     * @param entityRecord
      * 		A mapping of attributes to values to identify the company to
      * 		be deleted.
+     * @param entityName TODO
      * 
      * @throws CRMExecutionException
      * @throws CRMConnectionFailure
      */
-	public void deleteCompany(final HashMap<String, String> companyRecord)
+	public void deleteEntity(final HashMap<String, String> entityRecord, String entityName)
 			throws CRMExecutionException, CRMConnectionFailure {
-    	final String deleteSQL = generateDeleteStatement(companyRecord, "Company");
-    	executeSQL(deleteSQL, CRM_DATABASE, true, "Company");
+    	final String deleteSQL = generateDeleteStatement(entityRecord, entityName);
+    	executeSQL(deleteSQL, CRM_DATABASE, true, entityName);
     }
 
 	/**
