@@ -51,8 +51,6 @@ public class Handler {
 			jsonForEntity.put(singleEntity.getString("id"), singleEntity);
 		}
 		
-		
-		
 		return jsonForEntity.toString();
 	}
 

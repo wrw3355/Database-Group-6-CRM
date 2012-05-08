@@ -444,15 +444,23 @@ function handleExternalReference(entityName, id, externalId, create) {
 	var sqlDate = generateSQLCurrentDate();
 	
 	var json = {};
-	json[entity + "_id"] = id;
-	json[externalEntity + "_id"] = externalId;
-	json["create_date"] = sqlDate;
 	
 	if (create) {
+		json[entity + "_id"] = id;
+		json[externalEntity + "_id"] = externalId;
+		json["create_date"] = sqlDate;
+		
 		createEntity(tableName, JSON.stringify(json));
 	}
 	else {
-		updateEntity(tableName, JSON.stringify(json));
+		var external = getExternalReference(entity, id);
+		json[entity + "_id"] = id;
+		json[externalEntity + "_id"] = $("#external").attr("value");
+		json["id"] = external["id"];
+		
+		alert(JSON.stringify(json));
+		
+		updateEntity(tableName, JSON.stringify(json), external["id"]);
 	}
 }
 
