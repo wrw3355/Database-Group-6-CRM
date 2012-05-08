@@ -458,8 +458,6 @@ function handleExternalReference(entityName, id, externalId, create) {
 		json[externalEntity + "_id"] = $("#external").attr("value");
 		json["id"] = external["id"];
 		
-		alert(JSON.stringify(json));
-		
 		updateEntity(tableName, JSON.stringify(json), external["id"]);
 	}
 }
