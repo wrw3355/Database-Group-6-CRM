@@ -33,7 +33,7 @@ function populateEntityPage() {
     
     var entities = {};
     if (mode != MODE_CREATE) {
-    	entities = getRecordForEntity(entity, id);
+    	entities = getRecordForEntity(toTitleCase(entity), id);
     }
     
     for (name in fields) {
@@ -114,20 +114,22 @@ function populateEntityPage() {
     }
     
     if (entity == "Lead") {
-    	insertExternalReference("company");
+    	insertExternalReference("company", entity, id);
     }
     else if (entity == "Opportunity") {
-    	insertExternalReference("lead");
+    	insertExternalReference("lead", entity, id);
     }
     else if (entity == "Quote") {
-    	insertExternalReference("opportunity");
+    	insertExternalReference("opportunity", entity, id);
     }
     else if (entity == "Order") {
-    	insertExternalReference("quote");
+    	insertExternalReference("quote", entity, id);
     }
     
-    if ($("#external").length > 0 && mode == MODE_VIEW) {
-    	$("#external").attr("disabled", true);
+    if ($("#external").length > 0) {
+    	if (mode == MODE_VIEW) {
+    		$("#external").attr("disabled", true);
+    	}
     }
     	
 }
@@ -230,12 +232,17 @@ function populateEntityMenu() {
         	var jsonRecordString = getJSONFromForm();
         	
             if(mode == MODE_CREATE) {                
-                createEntity(entity, jsonRecordString);
+                id = createEntity(entity, jsonRecordString);
             }
             else if(mode == MODE_EDIT) {
-                // TODO: Commit to database
             	updateEntity(entity, jsonRecordString, id);
             }
+            
+            if($("#external").length > 0) {
+            	handleExternalReference(entity, id, $("#external").attr("value"), mode == MODE_CREATE);
+            }
+            
+            window.location = "entityPage.html?id=" + id + "&entity=" + entity + "&mode=view";
         });
         
         var deleteButton = $("<li/>");
@@ -377,8 +384,80 @@ function getHeadersForEntity(entity) {
 	}
 }
 
-function insertExternalReference(entity) {
-	var entities = getRecordForEntity(toTitleCase(entity), "");
+function generateSQLCurrentDate() {
+	var currentTime = new Date();
+	
+	var month = currentTime.getMonth() + 1;
+	var day = currentTime.getDate();
+	var year = currentTime.getFullYear();
+	
+	return year + "-" + month + "-" + day;
+}
+
+function getExternalReference(entityName, id) {
+	var entity = entityName.toLowerCase();
+	
+	var tableName = "";
+	
+	if (entity == "lead") {
+    	tableName = "company_gets";
+    }
+    else if (entity == "opportunity") {
+    	tableName = "lead_becomes";
+    }
+    else if (entity == "quote") {
+    	tableName = "opportunity_requests";
+    }
+    else if (entity == "order") {
+    	tableName = "quote_becomes";
+    }
+	
+	var json = {};
+	json[entity + "_id"] = id;
+	
+	return getRecordForEntity(tableName, id);
+}
+
+function handleExternalReference(entityName, id, externalId, create) {
+	
+	var entity = entityName.toLowerCase();
+	var tableName = "";
+	var externalEntity = "";
+	
+	if (entity == "lead") {
+		externalEntity = "company";
+    	tableName = "company_gets";
+    }
+    else if (entity == "opportunity") {
+    	externalEntity = "lead";
+    	tableName = "lead_becomes";
+    }
+    else if (entity == "quote") {
+    	externalEntity = "opportunity";
+    	tableName = "opportunity_requests";
+    }
+    else if (entity == "order") {
+    	externalEntity = "quote";
+    	tableName = "quote_becomes";
+    }
+	
+	var sqlDate = generateSQLCurrentDate();
+	
+	var json = {};
+	json[entity + "_id"] = id;
+	json[externalEntity + "_id"] = externalId;
+	json["create_date"] = sqlDate;
+	
+	if (create) {
+		createEntity(tableName, JSON.stringify(json));
+	}
+	else {
+		updateEntity(tableName, JSON.stringify(json));
+	}
+}
+
+function insertExternalReference(externalEntity, entity, entityid) {
+	var entities = getRecordForEntity(toTitleCase(externalEntity), "");
 	
 	var select = $("<select/>");
 	select.attr("id", "external");
@@ -388,11 +467,11 @@ function insertExternalReference(entity) {
 		
 		if("name" in entities[id]) {
 			option.html(entities[id]["name"]);
-			option.attr("value", entities[id]["name"]); 
+			option.attr("value", id); 
 		}
 		else {
 			option.html(entities[id]["description"]);
-			option.attr("value", entities[id]["description"]);
+			option.attr("value", id);
 		}
 		
 		select.append(option);
@@ -400,10 +479,13 @@ function insertExternalReference(entity) {
 	
 	var label = $("<label/>");
 	label.attr("for", "external");
-	label.html(toTitleCase(entity) + ": ");
+	label.html(toTitleCase(externalEntity) + ": ");
 
 	$("#entity").append(label);
 	$("#entity").append(select);
+	
+	var external = getExternalReference(entity, entityid);
+	select.attr("value", external[externalEntity + "_id"]);
 }
 
 function validateForm() {
@@ -438,8 +520,6 @@ function getJSONFromForm() {
     		record[this.id] = this.value;
     	}
     });
-    
-    alert(JSON.stringify(record));
     
     return JSON.stringify(record);
 }
@@ -482,6 +562,7 @@ function getSchemaForEntity(entity) {
 }
 
 function createEntity(entity, json) {
+	var result = "";
 	$.ajax({
         type: "POST",
         url: "http://localhost:8080/DatabaseConceptsServer/rest/" + entity,
@@ -490,13 +571,10 @@ function createEntity(entity, json) {
         dataType:"json",
         async: false,
         success: function(data) {
-            window.location = "entityPage.html?id=" + data.id + "&entity=" + entity + "&mode=view";
+        	result = data.id;
         }
     });
-	
-	if(entity == "Quote") {
-		
-	}
+	return result;
 }
 
 function updateEntity(entity, json, id) {
@@ -508,7 +586,6 @@ function updateEntity(entity, json, id) {
         dataType:"json",
         async: false,
         success: function(data) {
-            window.location = "entityPage.html?id=" + id + "&entity=" + entity + "&mode=view";
         }
     });
 }
@@ -529,7 +606,7 @@ function deleteEntity(entity, id) {
 function getRecordForEntity(entity, id) {
     var result;
     $.ajax({
-        url: "http://localhost:8080/DatabaseConceptsServer/rest/" + toTitleCase(entity) + "/" + id, 
+        url: "http://localhost:8080/DatabaseConceptsServer/rest/" + entity + "/" + id, 
         type: "GET",
         async: false,
         success: function(data) {

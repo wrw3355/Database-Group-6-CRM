@@ -120,7 +120,19 @@ public class JDBCLogic {
     private String generateSelectQuery(final HashMap<String, String> record, final String entityName) {
     	String whereClause = "";
     	
-    	if(record.containsKey(ID_COLUMN) && record.get(ID_COLUMN) != null) {
+    	if (entityName.equals("company_gets")) {
+    	    whereClause = "lead_id=" + record.get(ID_COLUMN) + ";";
+        }
+        else if (entityName.equals("lead_becomes")) {
+            whereClause = "opportunity_id=" + record.get(ID_COLUMN) + ";";
+        }
+        else if (entityName.equals("opportunity_requests")) {
+            whereClause = "quote_id=" + record.get(ID_COLUMN) + ";";
+        }
+        else if (entityName.equals("quote_becomes")) {
+            whereClause = "order_id=" + record.get(ID_COLUMN) + ";";
+        }
+        else if (record.containsKey(ID_COLUMN) && record.get(ID_COLUMN) != null) {
     		whereClause = "id=" + record.get(ID_COLUMN) + ";";
     	}
     	else {
