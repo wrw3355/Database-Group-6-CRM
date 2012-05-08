@@ -121,6 +121,7 @@ function populateEntityPage() {
     }
     else if (entity == "Quote") {
     	insertExternalReference("opportunity", entity, id, mode == MODE_CREATE);
+    	insertProductTable(id);
     }
     else if (entity == "Order") {
     	insertExternalReference("quote", entity, id, mode == MODE_CREATE);
@@ -274,6 +275,109 @@ function populateEntityMenu() {
     }
 }
 
+function insertProductTable(quoteId) {
+	var products = getRecordForEntity("quote_consists_of", quoteId);
+	var entity = $("#entity");
+	var productTable = generateProductTable(products);
+	
+	var productTableHeader = $("<h2/>");
+	productTableHeader.html("Products");
+	
+	entity.append(productTableHeader);
+	entity.append(productTable);
+	
+	insertExternalReference("product", "quote", quoteId, false, "productSelect", "Add a product: ");
+	
+	var quantityLabel = $("<label/>");
+	quantityLabel.attr("for", "quantity");
+	quantityLabel.attr("id", "quantityLabel")
+	quantityLabel.html("Quantity: ");
+	
+	var quantity = $("<input/>");
+	quantity.attr("type", "text");
+	quantity.attr("id", "quantity");
+	quantity.attr("name", "quantity");
+	quantity.attr("value", "0");
+	
+	var addButton = $("<input/>");
+	addButton.attr("type", "button");
+	addButton.attr("id", "addProduct");
+	addButton.attr("name", "addProduct");
+	addButton.attr("value", "Add product");
+	
+	entity.append(quantityLabel);
+	entity.append(quantity);
+	entity.append(addButton);
+	
+	if ($("#productSelect option").size() <= 0) {
+		$("#productSelect").attr("disabled", true);
+		quantity.attr("disabled", true);
+		addButton.attr("disabled", true);
+	}
+}
+
+function generateProductTable(products) {
+	var table = $("<table/>");
+    table.attr("id", "products");
+    
+    var headers = {
+    		"Name": "name",
+    		"Quantity": "quantity"
+    };
+    
+    insertHeaderRow(headers, table);
+    
+    // Insert an error row if there are no entities of this type
+    if (typeof entities == "undefined" || entities == null || $.isEmptyObject(entities)) {
+        table.append(generateErrorRow());
+        return table;
+    }
+    
+    var count = 0;
+    for (var id in products) {
+        var row = $("<tr/>");
+        row.attr("class", "row" + count);
+        
+        var deleteCol = $("<td/>");
+        deleteCol.attr("class", "checkboxContainer");
+        
+        var deleteButton = $("<input/>");
+        deleteButton.attr("value", "Delete");
+        deleteButton.attr("id", id);
+        deleteButton.attr("type", "button");
+        deleteCol.append(checkbox);
+        deleteCol.append(checkboxCol);
+        
+        for (var key in headers) {
+            var content = $("<td/>");
+            content.attr("id", id);
+            
+            content.html(entities[id][headers[key]]/*["value"]*/);
+            
+            row.append(content);
+        }
+        
+        
+        table.append(row);
+        
+        count = (count + 1) % 2;
+    }
+    
+    return table;
+}
+
+function generateErrorRow() {
+	var errorRow = $("<tr/>");
+    errorRow.attr("class", "noEntries");
+    
+    var errorContent = $("<td COLSPAN=\"3\"/>");
+    errorContent.html("There are no records to display for this entity.");
+    
+    errorRow.append(errorContent);
+    
+    return errorRow;
+}
+
 function populateGrid() {
     var grid = $("#grid");
     var content = $("#content");
@@ -287,7 +391,7 @@ function populateGrid() {
     
     var pageName = getEntitiesWithText()[entity];
     var pageHeader = $("<h2/>");
-    pageHeader.html(pageName);
+    pageHeader.html(toTitleCase(entity));
     
     content.prepend(pageHeader);
     
@@ -299,15 +403,8 @@ function populateGrid() {
     
     // Insert an error row if there are no entities of this type
     if (typeof entities == "undefined" || entities == null || $.isEmptyObject(entities)) {
-        var errorRow = $("<tr/>");
-        errorRow.attr("class", "noEntries");
-        
-        var errorContent = $("<td COLSPAN=\"3\"/>");
-        errorContent.html("There are no records to display for this entity.");
-        
-        errorRow.append(errorContent);
-        
-        grid.append(errorRow);
+        grid.append(generateErrorRow());
+        return;
     }
     
     var count = 0;
@@ -373,8 +470,7 @@ function getHeadersForEntity(entity) {
 	
 	if ("name" in schema) {
 	    return {
-	        "Name": "name",
-	        "Date": "date"
+	        "Name": "name"
 	    };
 	}
 	else {
@@ -462,11 +558,20 @@ function handleExternalReference(entityName, id, externalId, create) {
 	}
 }
 
-function insertExternalReference(externalEntity, entity, entityid, create) {
+function insertExternalReference(externalEntity, entity, entityid, create, selectId, labelText) {
 	var entities = getRecordForEntity(toTitleCase(externalEntity), "");
 	
 	var select = $("<select/>");
-	select.attr("id", "external");
+	
+	if (typeof selectId == "undefined" || selectId == null) {
+		selectId = "external";
+	}
+	
+	if (typeof labelText == "undefined" || labelText == null) {
+		labelText = toTitleCase(externalEntity) + ": ";
+	}
+	
+	select.attr("id", selectId);
 	
 	for(id in entities) {
 		var option = $("<option/>");
@@ -485,7 +590,7 @@ function insertExternalReference(externalEntity, entity, entityid, create) {
 	
 	var label = $("<label/>");
 	label.attr("for", "external");
-	label.html(toTitleCase(externalEntity) + ": ");
+	label.html(labelText);
 
 	$("#entity").append(label);
 	$("#entity").append(select);

@@ -12,7 +12,7 @@ h1 {
     padding: 35px;
 }
 
-h2 {
+#content h2 {
     margin-top: 2px;
 }
 
@@ -166,7 +166,7 @@ table, td, tr {
     clear: right;
 }
 
-#grid {
+#grid, #products {
     padding: 5px;
     margin: 0px auto;
     border: 1px solid #000;
@@ -174,12 +174,23 @@ table, td, tr {
     width: 97%;
 }
 
-#grid  .row0:hover, #grid .row1:hover {
+#grid .row0:hover, #grid .row1:hover,
+#products .row0:hover, #products .row1:hover {
     background: #C0C0C0;
     cursor: pointer;
 }
 
-#grid td {
+#productSelect {
+	clear: both;
+}
+
+#quantityLabel {
+	width: 200px;
+	float: none;
+	margin-left: 15px;	
+}
+
+#products td {
     padding: 3px;
 }
 
@@ -212,6 +223,11 @@ label {
     width: 300px;
     padding: 2px;
     border: 1px solid #000;
+}
+
+#entity #quantity {
+	width: 40px;
+	margin-right: 15px;
 }
 
 #entity select {

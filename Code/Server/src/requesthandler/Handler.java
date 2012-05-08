@@ -140,13 +140,18 @@ public class Handler {
 		
 		final List<Entity> result = logic.fetchEntity(map, entityName);
 		
-		final Entity entityResult = result.get(0);
-		final JSONObject jsonForEntity = new JSONObject();
+		if (!result.isEmpty()) {
+    		final Entity entityResult = result.get(0);
+    		final JSONObject jsonForEntity = new JSONObject();
+    		
+    		for(final Attribute a: entityResult.getAttributes()) {
+    			jsonForEntity.put(a.getName(), a.getValue());
+    		}
 		
-		for(final Attribute a: entityResult.getAttributes()) {
-			jsonForEntity.put(a.getName(), a.getValue());
+    		return jsonForEntity.toString();
 		}
-		
-		return jsonForEntity.toString();
+		else {
+		    return "{}";
+		}
 	}
 }

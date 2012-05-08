@@ -119,6 +119,7 @@ public class JDBCLogic {
 	 */
     private String generateSelectQuery(final HashMap<String, String> record, final String entityName) {
     	String whereClause = "";
+    	String joinString = "";
     	
     	if (entityName.equals("company_gets")) {
     	    whereClause = "lead_id=" + record.get(ID_COLUMN) + ";";
@@ -132,6 +133,10 @@ public class JDBCLogic {
         else if (entityName.equals("quote_becomes")) {
             whereClause = "order_id=" + record.get(ID_COLUMN) + ";";
         }
+        else if (entityName.equals("quote_consists_of")) {
+            whereClause = "quote_id=" + record.get(ID_COLUMN) + ";";
+            joinString = " JOIN Quote ";
+        }
         else if (record.containsKey(ID_COLUMN) && record.get(ID_COLUMN) != null) {
     		whereClause = "id=" + record.get(ID_COLUMN) + ";";
     	}
@@ -139,7 +144,7 @@ public class JDBCLogic {
     		whereClause = "1";
     	}
     	
-        return "SELECT * FROM `" + entityName + "` WHERE " + whereClause;
+        return "SELECT * FROM `" + entityName + "` " + joinString + " WHERE " + whereClause;
     }
 
     /**
