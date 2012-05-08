@@ -42,7 +42,7 @@ function populateEntityPage() {
         if (fields[name] == TYPE_TEXT || fields[name] == TYPE_DATE 
         		|| fields[name] == TYPE_DOUBLE) {
             label.attr("for", name);
-            label.html(toTitleCase(name) + ": ");
+            label.html(toTitleCase(name).replace("_", " ") + ": ");
             
             if(mode == MODE_CREATE || mode == MODE_EDIT) {
 
@@ -114,16 +114,16 @@ function populateEntityPage() {
     }
     
     if (entity == "Lead") {
-    	insertExternalReference("company", entity, id);
+    	insertExternalReference("company", entity, id, mode == MODE_CREATE);
     }
     else if (entity == "Opportunity") {
-    	insertExternalReference("lead", entity, id);
+    	insertExternalReference("lead", entity, id, mode == MODE_CREATE);
     }
     else if (entity == "Quote") {
-    	insertExternalReference("opportunity", entity, id);
+    	insertExternalReference("opportunity", entity, id, mode == MODE_CREATE);
     }
     else if (entity == "Order") {
-    	insertExternalReference("quote", entity, id);
+    	insertExternalReference("quote", entity, id, mode == MODE_CREATE);
     }
     
     if ($("#external").length > 0) {
@@ -462,7 +462,7 @@ function handleExternalReference(entityName, id, externalId, create) {
 	}
 }
 
-function insertExternalReference(externalEntity, entity, entityid) {
+function insertExternalReference(externalEntity, entity, entityid, create) {
 	var entities = getRecordForEntity(toTitleCase(externalEntity), "");
 	
 	var select = $("<select/>");
@@ -490,8 +490,10 @@ function insertExternalReference(externalEntity, entity, entityid) {
 	$("#entity").append(label);
 	$("#entity").append(select);
 	
-	var external = getExternalReference(entity, entityid);
-	select.attr("value", external[externalEntity + "_id"]);
+	if (!create) {
+		var external = getExternalReference(entity, entityid);
+		select.attr("value", external[externalEntity + "_id"]);
+	}
 }
 
 function validateForm() {

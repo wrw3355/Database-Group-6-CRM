@@ -202,9 +202,9 @@ table, td, tr {
 }
 
 label {
-    margin: 10px 0px 10px 40px;
+    margin: 10px 0px 10px 50px;
     float: left;
-    width: 100px;
+    width: 150px;
 }
 
 #entity input[type=text],
