@@ -29,12 +29,14 @@ public class JDBCLogic {
     
     /**
      * Fetches a list of entities from the database based on the given record.
-     * Fetches all records for the given type if the companyRecord HashMap does
+     * Fetches all records for the given type if the entityRecord HashMap does
      * not contain an Id column.
      * 
      * @param entityRecord
      * 		The mapping of attributes to values for the record.
-     * @param entityName TODO
+     * 
+     * @param entityName
+     *      The the name of the entity (table name).
      * 
      * @return
      * 		A list of company entities matching the record.
@@ -53,7 +55,9 @@ public class JDBCLogic {
      * 
      * @param entityRecord
      * 		A mapping of attributes to values for the company record.
-     * @param entityName TODO
+     * 
+     * @param entityName
+     *      The the name of the entity (table name).
      * 
      * @throws CRMExecutionException
      * @throws CRMConnectionFailure
@@ -69,7 +73,10 @@ public class JDBCLogic {
      * 
      * @param entityRecord
      * 		A mapping of attributes to values for the company record.
-     * @param entityName TODO
+     * 
+     * @param entityName
+     *      The the name of the entity (table name).
+     *      
      * @throws CRMExecutionException
      * @throws CRMConnectionFailure
      * @throws JSONException 
@@ -78,7 +85,6 @@ public class JDBCLogic {
     public JSONObject insertEntity(final HashMap<String, String> entityRecord, String entityName) throws CRMExecutionException, CRMConnectionFailure, JSONException, SQLException {
 		final String insertSQL = generateInsertStatement(entityRecord, entityName);
 		final List<Entity> resultingValues = executeSQL(insertSQL, CRM_DATABASE, true, entityName);
-		
 		
 		final JSONObject result = new JSONObject();
 		result.put("id", resultingValues.get(0).getId());
@@ -93,7 +99,9 @@ public class JDBCLogic {
      * @param entityRecord
      * 		A mapping of attributes to values to identify the company to
      * 		be deleted.
-     * @param entityName TODO
+     * 
+     * @param entityName
+     *      The the name of the entity (table name).
      * 
      * @throws CRMExecutionException
      * @throws CRMConnectionFailure
@@ -119,8 +127,14 @@ public class JDBCLogic {
 	 */
     private String generateSelectQuery(final HashMap<String, String> record, final String entityName) {
     	String whereClause = "";
+    	
+    	// TODO: Implement joinString to join the necessary tables
     	String joinString = "";
     	
+    	// Because with relationships we don't have the id for the given table
+    	// off hand, we only have the id for one of the tables in that relationship,
+    	// this sets up the logic for us to pass in a foreign key instead of the
+    	// primary key and query off of that value.
     	if (entityName.equals("company_gets")) {
     	    whereClause = "lead_id=" + record.get(ID_COLUMN) + ";";
         }
@@ -135,7 +149,6 @@ public class JDBCLogic {
         }
         else if (entityName.equals("quote_consists_of")) {
             whereClause = "quote_id=" + record.get(ID_COLUMN) + ";";
-            //joinString = " JOIN Quote ";
         }
         else if (record.containsKey(ID_COLUMN) && record.get(ID_COLUMN) != null) {
     		whereClause = "id=" + record.get(ID_COLUMN) + ";";
@@ -210,6 +223,7 @@ public class JDBCLogic {
             attributesBuilder.append(attribute + ", ");
             
             if (attribute.startsWith(BOOLEAN_PREFIX)) {
+                // Booleans should not be quoted
                 valuesBuilder.append(record.get(attribute) + ", ");   
             }
             else {
@@ -247,7 +261,7 @@ public class JDBCLogic {
     }
     
     /**
-     * Generates a map of column name to data type
+     * Generates a map of column name to data type.
      * 
      * @param entityName
      * 		The entity type (table name).
