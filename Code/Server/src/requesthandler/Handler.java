@@ -40,7 +40,7 @@ public class Handler {
 		
 		final List<Entity> result = logic.fetchEntity(map, entityName);
 
-		JSONObject jsonForEntity = getJSONForList(result, true);
+		final JSONObject jsonForEntity = getJSONForList(result, true);
 		
 		return jsonForEntity.toString();
 	}
