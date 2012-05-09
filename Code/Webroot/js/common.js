@@ -1,4 +1,3 @@
-
 var idMatches = $.deparam.querystring( true );
 
 var MODE_CREATE = "create";
@@ -195,7 +194,6 @@ function populateMenu() {
             
             if(confirm("Are you sure you want to delete the selected records?")) {
                 checkboxes.each(function() {
-                    // TODO: Delete from database
                 	deleteEntity(entity, this.value);
                 });
                 location.reload(true);
