@@ -135,7 +135,7 @@ public class JDBCLogic {
         }
         else if (entityName.equals("quote_consists_of")) {
             whereClause = "quote_id=" + record.get(ID_COLUMN) + ";";
-            joinString = " JOIN Quote ";
+            //joinString = " JOIN Quote ";
         }
         else if (record.containsKey(ID_COLUMN) && record.get(ID_COLUMN) != null) {
     		whereClause = "id=" + record.get(ID_COLUMN) + ";";

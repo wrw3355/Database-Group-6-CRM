@@ -121,7 +121,9 @@ function populateEntityPage() {
     }
     else if (entity == "Quote") {
     	insertExternalReference("opportunity", entity, id, mode == MODE_CREATE);
-    	insertProductTable(id);
+    	if (mode != MODE_CREATE) {
+    		insertProductTable(id);
+    	}
     }
     else if (entity == "Order") {
     	insertExternalReference("quote", entity, id, mode == MODE_CREATE);
@@ -240,7 +242,7 @@ function populateEntityMenu() {
             }
             
             if($("#external").length > 0) {
-            	handleExternalReference(entity, id, $("#external").attr("value"), mode == MODE_CREATE);
+            	handleExternalReference(entity, id, $("#external").val(), mode == MODE_CREATE);
             }
             
             window.location = "entityPage.html?id=" + id + "&entity=" + entity + "&mode=view";
@@ -275,7 +277,7 @@ function populateEntityMenu() {
     }
 }
 
-function insertProductTable(quoteId) {
+function insertProductTable(quoteId, create) {
 	var products = getRecordForEntity("quote_consists_of", quoteId);
 	var entity = $("#entity");
 	var productTable = generateProductTable(products);
@@ -290,7 +292,7 @@ function insertProductTable(quoteId) {
 	
 	var quantityLabel = $("<label/>");
 	quantityLabel.attr("for", "quantity");
-	quantityLabel.attr("id", "quantityLabel")
+	quantityLabel.attr("id", "quantityLabel");
 	quantityLabel.html("Quantity: ");
 	
 	var quantity = $("<input/>");
@@ -305,6 +307,59 @@ function insertProductTable(quoteId) {
 	addButton.attr("name", "addProduct");
 	addButton.attr("value", "Add product");
 	
+	addButton.click(function() {
+		var quantity = $("#quantity");
+		if (parseInt(quantity.val()) <= 0) {
+			alert("You must specify a quantity greater than 0.");
+		}
+		else {
+			var productSelect = $("#productSelect");
+			
+			if( $("#products #" + productSelect.val()).length > 0) {
+				var quantityField = $("#products #" + productSelect.val() + " .productTableQuantity");
+				var productId = $("#products #"  + productSelect.val() + " .productNameCell").attr("id");
+				
+				var quantityValue = parseInt($("#quantity").val());
+				
+				quantityField.val(quantityValue + parseInt(quantityField.val()));
+				$("#quantity").val("0");
+				
+				var json = {
+					"quote_id": quoteId,
+					"product_id": productSelect.val(),
+					"quantity": quantityField.val()
+				};
+				
+				updateEntity("quote_consists_of", JSON.stringify(json), productId);
+			}
+			else {
+				
+				var errorRow = $(".noEntries");
+				if (errorRow.length > 0) {
+					errorRow.remove();
+				}
+			
+				var row = generateProductTableRow(productSelect.val(), $("#quantity").val());
+				
+				productTable.append(row);
+				
+				var json = {
+					"quote_id": quoteId,
+					"product_id": productSelect.val(),
+					"quantity": $("#quantity").val()
+				};
+				
+				alert(JSON.stringify(json));
+				var productId = createEntity("quote_consists_of", JSON.stringify(json));
+				
+				// Need to store the new product id somewhere...
+				$("#products #" + productId + " .productNameCell").attr("id", productId);
+				
+				$("#quantity").val("0");
+			}
+		}
+	});
+	
 	entity.append(quantityLabel);
 	entity.append(quantity);
 	entity.append(addButton);
@@ -314,6 +369,57 @@ function insertProductTable(quoteId) {
 		quantity.attr("disabled", true);
 		addButton.attr("disabled", true);
 	}
+	
+	populateProductTable(quoteId);
+}
+
+function generateProductTableRow(productId, quantity) {
+	var row = $("<tr/>");
+	row.attr("id", productId);
+	
+	var rowCount = $("#products tr").length - 1;
+	row.attr("class", "row" + (rowCount % 2));
+	
+	var buttonCell = $("<td/>");
+	
+	var productName = $("<td/>");
+	productName.attr("class", "productNameCell");
+	productName.html($("#productSelect option[value='" + productId + "']").text());
+	
+	var quantityCell = $("<td/>");
+	
+	var quantityValue = parseInt(quantity);
+	
+	var quantityText = $("<input/>");
+	quantityText.attr("type", "text");
+	quantityText.attr("class", "productTableQuantity");
+	quantityText.attr("value", quantityValue);
+	quantityText.attr("disabled", true);
+	
+	quantityCell.append(quantityText);
+	
+	row.append(buttonCell);
+	row.append(productName);
+	row.append(quantityCell);
+	
+	return row;
+}
+
+function populateProductTable(id) {
+	var table = $("#products");
+	var products = getRecordForEntity("quote_consists_of", id);
+	
+	for (var productId in products) {
+		var productRowId = products[productId]["product_id"];
+		var row = generateProductTableRow(productRowId, products[productId]["quantity"]);
+		table.append(row);
+	
+		$("#products #" + productRowId + " .productNameCell").attr("id", productId);
+	}
+	
+	if (typeof products != "undefined" && products != null && !$.isEmptyObject(products)) {
+        $(".noEntries").remove();
+    }
 }
 
 function generateProductTable(products) {
@@ -551,7 +657,7 @@ function handleExternalReference(entityName, id, externalId, create) {
 	else {
 		var external = getExternalReference(entity, id);
 		json[entity + "_id"] = id;
-		json[externalEntity + "_id"] = $("#external").attr("value");
+		json[externalEntity + "_id"] = $("#external").val();
 		json["id"] = external["id"];
 		
 		updateEntity(tableName, JSON.stringify(json), external["id"]);

@@ -189,9 +189,9 @@ table, td, tr {
 	float: none;
 	margin-left: 15px;	
 }
-
 #products td {
     padding: 3px;
+    border: 0px;
 }
 
 #headerRow {
@@ -223,6 +223,10 @@ label {
     width: 300px;
     padding: 2px;
     border: 1px solid #000;
+}
+
+#products tr td input[type=text] {
+	width: 100px;
 }
 
 #entity #quantity {

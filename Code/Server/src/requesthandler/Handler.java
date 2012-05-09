@@ -39,19 +39,30 @@ public class Handler {
 		map.put("id", null);
 		
 		final List<Entity> result = logic.fetchEntity(map, entityName);
-		
-		final JSONObject jsonForEntity = new JSONObject();
-		
-		for(final Entity entityResult: result) {
-			
-			final JSONObject singleEntity = new JSONObject();
-			for(final Attribute a: entityResult.getAttributes()) {
-				singleEntity.put(a.getName(), a.getValue());
-			}
-			jsonForEntity.put(singleEntity.getString("id"), singleEntity);
-		}
+
+		JSONObject jsonForEntity = getJSONForList(result, true);
 		
 		return jsonForEntity.toString();
+	}
+	
+	private JSONObject getJSONForList(final List<Entity> result, final boolean includeAll) throws JSONException {
+	    final JSONObject jsonForEntity = new JSONObject();
+        
+        for(final Entity entityResult: result) {
+            
+            final JSONObject singleEntity = new JSONObject();
+            for(final Attribute a: entityResult.getAttributes()) {
+                singleEntity.put(a.getName(), a.getValue());
+            }
+            
+            if (!includeAll) {
+                return singleEntity;
+            }
+            
+            jsonForEntity.put(singleEntity.getString("id"), singleEntity);
+        }
+        
+        return jsonForEntity;
 	}
 
 	@POST
@@ -141,14 +152,7 @@ public class Handler {
 		final List<Entity> result = logic.fetchEntity(map, entityName);
 		
 		if (!result.isEmpty()) {
-    		final Entity entityResult = result.get(0);
-    		final JSONObject jsonForEntity = new JSONObject();
-    		
-    		for(final Attribute a: entityResult.getAttributes()) {
-    			jsonForEntity.put(a.getName(), a.getValue());
-    		}
-		
-    		return jsonForEntity.toString();
+		    return getJSONForList(result, entityName.equals("quote_consists_of")).toString();
 		}
 		else {
 		    return "{}";
