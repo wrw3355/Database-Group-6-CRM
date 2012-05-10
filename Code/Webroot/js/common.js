@@ -41,7 +41,7 @@ function populateEntityPage() {
         if (fields[name] == TYPE_TEXT || fields[name] == TYPE_DATE 
         		|| fields[name] == TYPE_DOUBLE) {
             label.attr("for", name);
-            label.html(toTitleCase(name).replace("_", " ") + ": ");
+            label.html(toTitleCase(name).replace(/_/g, " ") + ": ");
             
             if(mode == MODE_CREATE || mode == MODE_EDIT) {
 
@@ -311,20 +311,27 @@ function insertProductTable(quoteId, create) {
 			alert("You must specify a quantity greater than 0.");
 		}
 		else {
-			var productSelect = $("#productSelect");
+			var productSelect = $("#productSelect option:selected");
 			
-			if( $("#products #" + productSelect.val()).length > 0) {
-				var quantityField = $("#products #" + productSelect.val() + " .productTableQuantity");
-				var productId = $("#products #"  + productSelect.val() + " .productNameCell").attr("id");
+			if( $("#products #" + productSelect.attr("id")).length > 0) {
+				var quantityField = $("#products #" + productSelect.attr("id") + " .productTableQuantity");
+				var productId = $("#products #"  + productSelect.attr("id") + " .productNameCell").attr("id");
+				var priceCell = $("#products #"  + productSelect.attr("id") + " .productPriceCell");
 				
+				var pricePer = parseFloat($("#products #" + productSelect.attr("id") + " .productTablePrice").val());
 				var quantityValue = parseInt($("#quantity").val());
 				
-				quantityField.val(quantityValue + parseInt(quantityField.val()));
+				var newQuantity = quantityValue + parseInt(quantityField.val());
+				var priceValue = pricePer * newQuantity;
+				
+				
+				quantityField.val(newQuantity);
+				priceCell.html(priceValue);
 				$("#quantity").val("0");
 				
 				var json = {
 					"quote_id": quoteId,
-					"product_id": productSelect.val(),
+					"product_id": productSelect.attr("id"),
 					"quantity": quantityField.val()
 				};
 				
@@ -337,13 +344,13 @@ function insertProductTable(quoteId, create) {
 					errorRow.remove();
 				}
 			
-				var row = generateProductTableRow(productSelect.val(), $("#quantity").val());
+				var row = generateProductTableRow(productSelect.attr("id"), $("#quantity").val());
 				
 				productTable.append(row);
 				
 				var json = {
 					"quote_id": quoteId,
-					"product_id": productSelect.val(),
+					"product_id": productSelect.attr("id"),
 					"quantity": $("#quantity").val()
 				};
 				
@@ -372,6 +379,8 @@ function insertProductTable(quoteId, create) {
 }
 
 function generateProductTableRow(productId, quantity) {
+	var selectedProduct = $("#productSelect option[id='" + productId + "']");
+	
 	var row = $("<tr/>");
 	row.attr("id", productId);
 	
@@ -382,7 +391,7 @@ function generateProductTableRow(productId, quantity) {
 	
 	var productName = $("<td/>");
 	productName.attr("class", "productNameCell");
-	productName.html($("#productSelect option[value='" + productId + "']").text());
+	productName.html(selectedProduct.text());
 	
 	var quantityCell = $("<td/>");
 	
@@ -394,11 +403,22 @@ function generateProductTableRow(productId, quantity) {
 	quantityText.attr("value", quantityValue);
 	quantityText.attr("disabled", true);
 	
+	var pricePer = $("<input/>");
+	pricePer.attr("type", "hidden");
+	pricePer.attr("value", selectedProduct.val());
+	pricePer.attr("class", "productTablePrice");
+	
 	quantityCell.append(quantityText);
+	quantityCell.append(pricePer);
+	
+	var priceCell = $("<td/>");
+	priceCell.attr("class", "productPriceCell");
+	priceCell.html(parseFloat(selectedProduct.val()) * quantityValue);
 	
 	row.append(buttonCell);
 	row.append(productName);
 	row.append(quantityCell);
+	row.append(priceCell);
 	
 	return row;
 }
@@ -683,7 +703,8 @@ function insertExternalReference(externalEntity, entity, entityid, create, selec
 		
 		if("name" in entities[id]) {
 			option.html(entities[id]["name"]);
-			option.attr("value", id); 
+			option.attr("value", entities[id]["price"])
+			option.attr("id", id); 
 		}
 		else {
 			option.html(entities[id]["description"]);
