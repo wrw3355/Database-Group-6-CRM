@@ -426,7 +426,8 @@ function generateProductTable(products) {
     
     var headers = {
     		"Name": "name",
-    		"Quantity": "quantity"
+    		"Quantity": "quantity",
+    		"Price": "price"
     };
     
     insertHeaderRow(headers, table);
