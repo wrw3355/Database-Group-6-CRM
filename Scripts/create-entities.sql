@@ -62,6 +62,7 @@ CREATE TABLE `Currency` (
     id varchar(3) NOT NULL,
     name varchar(255) NOT NULL,
     isPrimary tinyint(1) NOT NULL,
+    ISO_code varchar(255) NOT NULL,
     PRIMARY KEY (id)
 );
 
