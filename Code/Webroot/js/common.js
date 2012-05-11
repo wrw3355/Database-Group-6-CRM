@@ -613,8 +613,8 @@ function populateGrid() {
     content.prepend(pageHeader);
     
     // Insert the top of the page header
-    var headers = getHeadersForEntity(entity);
-    var entities = getRecordForEntity(toTitleCase(entity), "");
+    var headers = getHeadersForEntity(entity + "View");
+    var entities = getRecordForEntity(toTitleCase(entity), "", true);
     
     insertHeaderRow(headers, grid);
     
@@ -684,17 +684,20 @@ function toTitleCase(text) {
 
 function getHeadersForEntity(entity) {
 	var schema = getSchemaForEntity(entity);
+	var result = {};
+	for (var key in schema) {
+		if (key == "id") {
+			continue;
+		}
+		else {
+			result[toTitleCase(key).replace(/_/g, " ")] = key;
+		}
+			
+	}
 	
-	if ("name" in schema) {
-	    return {
-	        "Name": "name"
-	    };
-	}
-	else {
-		return {
-			"Description": "description"
-		};
-	}
+	alert(JSON.stringify(result));
+	
+	return result;
 }
 
 function generateSQLCurrentDate() {
@@ -934,8 +937,13 @@ function deleteEntity(entity, id) {
     });
 }
 
-function getRecordForEntity(entity, id) {
+function getRecordForEntity(entity, id, useView) {
     var result;
+    
+    if (typeof useView != "undefined" && useView) {
+    	entity += "View";
+    }
+    
     $.ajax({
         url: "http://localhost:8080/DatabaseConceptsServer/rest/" + entity + "/" + id, 
         type: "GET",
