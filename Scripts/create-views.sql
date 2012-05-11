@@ -11,10 +11,10 @@ CREATE VIEW `QuoteView` AS
 SELECT description, create_date FROM `Quote` JOIN `opportunity_requests`;
 
 CREATE VIEW `ProductView` AS
-SELECT description, price FROM `Quote`;
+SELECT description, price FROM `Product`;
 
 CREATE VIEW `OrderView` AS
 SELECT description, create_date FROM `Quote` JOIN `quote_becomes`;
 
-CREATE VIEW `Currency` AS
-SELECT description, ISO_code FROM `Currency`;
+CREATE VIEW `CurrencyView` AS
+SELECT name, ISO_code FROM `Currency`;
