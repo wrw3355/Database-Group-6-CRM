@@ -1,0 +1,10 @@
+INSERT INTO Opportunity(description,win_percentage,close_reason,open_date,close_date) VALUES ('Opportunity Description 1','0','user-cancelled','2012-05-06','2012-05-10');
+INSERT INTO Opportunity(description,win_percentage,close_reason,open_date,close_date) VALUES ('Opportunity Description 1','0','user-cancelled','2012-05-04','2012-05-09');
+INSERT INTO Opportunity(description,win_percentage,close_reason,open_date,close_date) VALUES ('Opportunity Description 1','0','unknown','2012-05-05','2012-05-09');
+INSERT INTO Opportunity(description,win_percentage,close_reason,open_date,close_date) VALUES ('Opportunity Description 1','0','unknown','2012-05-04','2012-05-10');
+INSERT INTO Opportunity(description,win_percentage,close_reason,open_date,close_date) VALUES ('Opportunity Description 1','0','unspecified','2012-05-06','2012-05-10');
+INSERT INTO Opportunity(description,win_percentage,close_reason,open_date,close_date) VALUES ('Opportunity Description 1','0','unspecified','2012-05-05','2012-05-10');
+INSERT INTO Opportunity(description,win_percentage,close_reason,open_date,close_date) VALUES ('Opportunity Description 1','0','unspecified','2012-05-05','2012-05-09');
+INSERT INTO Opportunity(description,win_percentage,close_reason,open_date,close_date) VALUES ('Opportunity Description 1','0','unknown','2012-05-07','2012-05-09');
+INSERT INTO Opportunity(description,win_percentage,close_reason,open_date,close_date) VALUES ('Opportunity Description 1','0','unknown','2012-05-07','2012-05-09');
+INSERT INTO Opportunity(description,win_percentage,close_reason,open_date,close_date) VALUES ('Opportunity Description 1','0','unknown','2012-05-07','2012-05-09');
