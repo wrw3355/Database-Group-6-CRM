@@ -59,7 +59,7 @@ CREATE TABLE `Order` (
 );
 
 CREATE TABLE `Currency` (
-    id int NOT NULL AUTO_INCREMENT,
+    id varchar(3) NOT NULL,
     name varchar(255) NOT NULL,
     isPrimary tinyint(1) NOT NULL,
     PRIMARY KEY (id)

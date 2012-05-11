@@ -141,11 +141,14 @@ public class JDBCLogic {
         else if (entityName.equals("lead_becomes")) {
             whereClause = "opportunity_id=" + record.get(ID_COLUMN) + ";";
         }
-        else if (entityName.equals("opportunity_requests") || entityName.equals("quote_consists_of")) {
+        else if (entityName.equals("opportunity_requests")) {
             whereClause = "quote_id=" + record.get(ID_COLUMN) + ";";
         }
         else if (entityName.equals("quote_becomes")) {
             whereClause = "order_id=" + record.get(ID_COLUMN) + ";";
+        }
+        else if (entityName.equals("quote_consists_of")) {
+            whereClause = "quote_id=" + record.get(ID_COLUMN) + ";";
         }
         else if (record.containsKey(ID_COLUMN) && record.get(ID_COLUMN) != null) {
     		whereClause = "id=" + record.get(ID_COLUMN) + ";";

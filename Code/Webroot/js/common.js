@@ -250,9 +250,7 @@ function populateEntityMenu() {
         deleteButton.html("Delete");
         deleteButton.click(function() {
             if(confirm("Are you sure you want to delete this record?")) {
-                // TODO: Delete from database
             	deleteEntity(entity, id);
-            	
                 window.close();
             }
             else {
@@ -314,28 +312,7 @@ function insertProductTable(quoteId, create) {
 			var productSelect = $("#productSelect option:selected");
 			
 			if( $("#products #" + productSelect.attr("id")).length > 0) {
-				var quantityField = $("#products #" + productSelect.attr("id") + " .productTableQuantity");
-				var productId = $("#products #"  + productSelect.attr("id") + " .productNameCell").attr("id");
-				var priceCell = $("#products #"  + productSelect.attr("id") + " .productPriceCell");
-				
-				var pricePer = parseFloat($("#products #" + productSelect.attr("id") + " .productTablePrice").val());
-				var quantityValue = parseInt($("#quantity").val());
-				
-				var newQuantity = quantityValue + parseInt(quantityField.val());
-				var priceValue = pricePer * newQuantity;
-				
-				
-				quantityField.val(newQuantity);
-				priceCell.html(priceValue);
-				$("#quantity").val("0");
-				
-				var json = {
-					"quote_id": quoteId,
-					"product_id": productSelect.attr("id"),
-					"quantity": quantityField.val()
-				};
-				
-				updateEntity("quote_consists_of", JSON.stringify(json), productId);
+				updateProductTableRow(quoteId, productSelect.attr("id"));
 			}
 			else {
 				
@@ -343,10 +320,6 @@ function insertProductTable(quoteId, create) {
 				if (errorRow.length > 0) {
 					errorRow.remove();
 				}
-			
-				var row = generateProductTableRow(productSelect.attr("id"), $("#quantity").val());
-				
-				productTable.append(row);
 				
 				var json = {
 					"quote_id": quoteId,
@@ -354,11 +327,12 @@ function insertProductTable(quoteId, create) {
 					"quantity": $("#quantity").val()
 				};
 				
-				alert(JSON.stringify(json));
 				var productId = createEntity("quote_consists_of", JSON.stringify(json));
 				
 				// Need to store the new product id somewhere...
-				$("#products #" + productId + " .productNameCell").attr("id", productId);
+				var row = generateProductTableRow(quoteId, productSelect.attr("id"), $("#quantity").val(), productId);
+				
+				productTable.append(row);
 				
 				$("#quantity").val("0");
 			}
@@ -378,7 +352,38 @@ function insertProductTable(quoteId, create) {
 	populateProductTable(quoteId);
 }
 
-function generateProductTableRow(productId, quantity) {
+function updateProductTableRow(quoteId, productSelectId, nQty) {
+	var productSelect = $("#productSelect option:selected");
+	
+	var quantityField = $("#products #" + productSelectId + " .productTableQuantity");
+	var productId = $("#products #"  + productSelectId + " .productNameCell").attr("id");
+	var priceCell = $("#products #"  + productSelectId + " .productPriceCell");
+
+	var pricePer = parseFloat($("#products #" + productSelectId + " .productTablePrice").val());
+	var quantityValue = parseInt($("#quantity").val());
+	
+	var newQuantity = nQty;
+	if (typeof newQuantity == "undefined" || newQuantity == null) {
+		 newQuantity = quantityValue + parseInt(quantityField.val());
+		 alert("New Quantity: " + newQuantity);
+	}
+	
+	var priceValue = (pricePer * newQuantity).toFixed(2);
+	
+	quantityField.val(newQuantity);
+	priceCell.html(priceValue);
+	$("#quantity").val("0");
+	
+	var json = {
+		"quote_id": quoteId,
+		"product_id": productSelect.attr("id"),
+		"quantity": quantityField.val()
+	};
+	
+	updateEntity("quote_consists_of", JSON.stringify(json), productId);
+}
+
+function generateProductTableRow(quoteId, productId, quantity, productRelationshipId) {
 	var selectedProduct = $("#productSelect option[id='" + productId + "']");
 	
 	var row = $("<tr/>");
@@ -389,6 +394,21 @@ function generateProductTableRow(productId, quantity) {
 	
 	var buttonCell = $("<td/>");
 	
+	var deleteButton = $("<input/>");
+	deleteButton.attr("type", "button");
+	deleteButton.attr("value", "Delete Item");
+	deleteButton.click(function() {
+		deleteEntity("quote_consists_of", productRelationshipId);
+		$("#products #" + productId).remove();
+		
+		var numProducts = $("#products tr").length;
+		if (numProducts <= 1) {
+			$("#products").append(generateErrorRow());
+		}
+	});
+	
+	buttonCell.append(deleteButton);
+
 	var productName = $("<td/>");
 	productName.attr("class", "productNameCell");
 	productName.html(selectedProduct.text());
@@ -413,12 +433,24 @@ function generateProductTableRow(productId, quantity) {
 	
 	var priceCell = $("<td/>");
 	priceCell.attr("class", "productPriceCell");
-	priceCell.html(parseFloat(selectedProduct.val()) * quantityValue);
+	priceCell.html(parseFloat((selectedProduct.val()) * quantityValue).toFixed(2));
 	
 	row.append(buttonCell);
 	row.append(productName);
 	row.append(quantityCell);
 	row.append(priceCell);
+	
+	row.click(function() {
+		var nQty = $("#products #" + productId + " .productTableQuantity").val();
+		var newValue = parseInt(prompt("Enter the new quantity:", nQty));
+		
+		if (newValue <= 0 || isNaN(newValue)) {
+			alert("Please enter a number greater than 0.");
+		}
+		else {
+			updateProductTableRow(quoteId, productId, newValue);
+		}
+	});
 	
 	return row;
 }
@@ -429,7 +461,7 @@ function populateProductTable(id) {
 	
 	for (var productId in products) {
 		var productRowId = products[productId]["product_id"];
-		var row = generateProductTableRow(productRowId, products[productId]["quantity"]);
+		var row = generateProductTableRow(id, productRowId, products[productId]["quantity"], productId);
 		table.append(row);
 	
 		$("#products #" + productRowId + " .productNameCell").attr("id", productId);
@@ -495,7 +527,7 @@ function generateErrorRow() {
 	var errorRow = $("<tr/>");
     errorRow.attr("class", "noEntries");
     
-    var errorContent = $("<td COLSPAN=\"3\"/>");
+    var errorContent = $("<td COLSPAN=\"4\"/>");
     errorContent.html("There are no records to display for this entity.");
     
     errorRow.append(errorContent);
@@ -704,7 +736,7 @@ function insertExternalReference(externalEntity, entity, entityid, create, selec
 		if("name" in entities[id]) {
 			option.html(entities[id]["name"]);
 			option.attr("value", entities[id]["price"])
-			option.attr("id", id); 
+			option.attr("id", id);
 		}
 		else {
 			option.html(entities[id]["description"]);
