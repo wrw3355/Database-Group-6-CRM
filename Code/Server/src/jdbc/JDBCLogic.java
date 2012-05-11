@@ -350,7 +350,7 @@ public class JDBCLogic {
      * @param database
      *         The name of the database to target the query with.
      *
-     * @param manipulation
+     * @param isCUDOperation
      *         True if it is a create, update or delete. False for select.
      *
      * @param entityName
@@ -364,7 +364,7 @@ public class JDBCLogic {
      * @throws CRMConnectionFailure
      */
     private List<Entity> executeSQL(final String query, final String database,
-            final boolean manipulation, final String entityName)
+            final boolean isCUDOperation, final String entityName)
             throws CRMExecutionException, CRMConnectionFailure {
 
         final Connection conn = JDBCController.getConnection(database);
@@ -372,7 +372,7 @@ public class JDBCLogic {
         try {
             final Statement st = conn.createStatement();
 
-            if (manipulation) {
+            if (isCUDOperation) {
                 System.err.println(query);
                 st.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
 
