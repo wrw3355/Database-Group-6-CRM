@@ -65,13 +65,13 @@ public class JDBCLogic {
      * @throws CRMExecutionException
      * @throws CRMConnectionFailure
      */
-	public void updateEntity(final HashMap<String, String> entityRecord,
-			String entityName) throws CRMExecutionException,
-			CRMConnectionFailure {
-			
-		final String updateSQL = generateUpdateQuery(entityRecord, entityName);
-		executeSQL(updateSQL, CRM_DATABASE, true, entityName);
-	}
+    public void updateEntity(final HashMap<String, String> entityRecord,
+            String entityName) throws CRMExecutionException,
+            CRMConnectionFailure {
+            
+        final String updateSQL = generateUpdateQuery(entityRecord, entityName);
+        executeSQL(updateSQL, CRM_DATABASE, true, entityName);
+    }
 
     /**
      * Creates a new company in the database for the given HashMap of
@@ -160,6 +160,9 @@ public class JDBCLogic {
         else if (entityName.equals("quote_becomes")) {
             whereClause = "order_id=" + record.get(ID_COLUMN) + ";";
         }
+        else if (entityName.equals("Currency")) {
+              whereClause = "isPrimary=1;";
+        }
         else if (record.containsKey(ID_COLUMN) && record.get(ID_COLUMN) != null) {
             whereClause = "id=" + record.get(ID_COLUMN) + ";";
         }
@@ -225,9 +228,9 @@ public class JDBCLogic {
      * @throws CRMConnectionFailure
      * @throws SQLException
      */
-	private String generateInsertStatement(
-			final HashMap<String, String> record, final String entityName)
-			throws CRMConnectionFailure, SQLException {
+    private String generateInsertStatement(
+            final HashMap<String, String> record, final String entityName)
+            throws CRMConnectionFailure, SQLException {
 
         final StringBuilder attributesBuilder = new StringBuilder();
         final StringBuilder valuesBuilder = new StringBuilder();
@@ -294,8 +297,8 @@ public class JDBCLogic {
             final Statement st = conn.createStatement();
 
             final ResultSet results = st.executeQuery(
-            	"SELECT column_name, data_type FROM columns WHERE table_name='"
-            	 + entityName + "'");
+                "SELECT column_name, data_type FROM columns WHERE table_name='"
+                 + entityName + "'");
             final ResultSetMetaData metadata = results.getMetaData();
 
 
@@ -335,9 +338,9 @@ public class JDBCLogic {
             return schema;
         }
         catch (final SQLException se) {
-			throw new CRMExecutionException(
-					"Unable to get schema for entity type " + entityName
-							+ " because of an exception.", se);
+            throw new CRMExecutionException(
+                    "Unable to get schema for entity type " + entityName
+                            + " because of an exception.", se);
         }
     }
 
@@ -423,7 +426,7 @@ public class JDBCLogic {
         }
         catch (final SQLException se) {
             throw new CRMExecutionException(
-            	"Unable to execute the query: (" + query + ") because of an exception.", se);
+                "Unable to execute the query: (" + query + ") because of an exception.", se);
         }
     }
 }
