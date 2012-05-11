@@ -18,7 +18,7 @@ SELECT `Product`.id as id, description, price
 FROM `Product`;
 
 CREATE VIEW `OrderView` AS
-SELECT `Order`.id as id, description, create_date FROM `Quote`
+SELECT `Order`.id as id, description, create_date FROM `Order`
 JOIN `quote_becomes`;
 
 CREATE VIEW `CurrencyView` AS
