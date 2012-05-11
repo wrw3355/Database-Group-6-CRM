@@ -24,6 +24,7 @@ function ensureLoggedIn() {
 	}
 }
 
+
 function login() {
 	var username = $("#usernameLogin").val();
 	var password = $("#passwordLogin").val();
