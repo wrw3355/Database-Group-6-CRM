@@ -34,22 +34,23 @@ function populateEntityPage() {
     var id = idMatches["id"];
     var mode = idMatches["mode"];
     
-    var fields = getSchemaForEntity(entity);
+    var schema = getSchemaForEntity(entity);
     
     var entities = {};
     if (mode != MODE_CREATE) {
     	entities = getRecordForEntity(toTitleCase(entity), id);
     }
     
-    for (name in fields) {
+    for (name in schema) {
         var element = "";
         var label = $("<label/>");
-        if (fields[name] == TYPE_TEXT || fields[name] == TYPE_DATE 
-        		|| fields[name] == TYPE_DOUBLE) {
+        if (schema[name] == TYPE_TEXT || schema[name] == TYPE_DATE 
+        		|| schema[name] == TYPE_DOUBLE) {
+        	
             label.attr("for", name);
             label.html(toTitleCase(name).replace(/_/g, " ") + ": ");
             
-            if(mode == MODE_CREATE || mode == MODE_EDIT) {
+            if (mode == MODE_CREATE || mode == MODE_EDIT) {
 
                 element = $("<input/>");
                 element.attr("type", "text");
@@ -70,16 +71,23 @@ function populateEntityPage() {
                 element.attr("class", "attributeText");
                 element.attr("id", name);
                 
-                if(typeof entities == "undefined" || entities == null) {
+                if (typeof entities == "undefined" || entities == null) {
                     alert("A record with the id '" + id + "' does not exist.");
                     return;
                 }
                 
                 var value = entities[name];
+                
+            	// Add the currency information
+            	if (schema[name] == TYPE_DOUBLE) {
+            		var currency = getRecordForEntity("Currency", "asdf");
+            		value += ' (' + currency["id"] + ')';
+            	}
+            	
                 element.html(value);
             }
         }
-        else if (fields[name] == TYPE_BOOLEAN) {
+        else if (schema[name] == TYPE_BOOLEAN) {
         	label.attr("for", name);
             label.html(toTitleCase(name) + ": ");
             
