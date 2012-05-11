@@ -75,8 +75,10 @@ table, td, tr {
 }
 
 .checkboxContainer {
-    width: 50px;
-    text-align: center;
+    width: 100%;
+    text-align: left;
+    float: left;
+    clear: right;
 }
 
 #main {
@@ -234,6 +236,7 @@ label {
     border: 1px solid #000;
 }
 
+
 #products tr td input[type=text] {
 	width: 100px;
 }
@@ -248,12 +251,18 @@ label {
 }
 
 #entity .checkboxContainer {
-	width: 200px;
+	width: 580px;
 	padding: 8px 4px 4px 4px;
 }
+
 
 
 #entity input, .attributeText {
     margin: 10px 0px;
     height: auto;
 }
+
+.attributeText {
+	float: left;
+}
+

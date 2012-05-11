@@ -10,6 +10,12 @@ var TYPE_DOUBLE = "double";
 var TYPE_DATE = "date";
 var TYPE_BOOLEAN = "tinyint";
 
+$(document).ready(function() {
+	if (localStorage.getItem("loggedIn") != true) {
+		window.location = "register.html";
+	}
+}
+
 
 function initEntityPage() {
     var entity = idMatches["entity"];
