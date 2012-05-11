@@ -349,7 +349,7 @@ public class JDBCLogic {
 		    
 		    if (manipulation) {
 		        System.err.println(query);
-		    	final int sqlResultValue = st.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
+		    	st.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
 		    	
 		    	// Because the id column is auto-generated, we need to capture it
 		    	// from this result set, if it's an insert. Otherwise it will be
