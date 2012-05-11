@@ -1,20 +1,25 @@
 CREATE VIEW `CompanyView` AS
-SELECT name FROM `Company`;
+SELECT id, name FROM `Company`;
 
 CREATE VIEW `LeadView` AS
-SELECT name, create_date FROM `Company` JOIN `company_gets`;
+SELECT `Lead`.id as id, description, create_date
+FROM `Lead` JOIN `company_gets`;
 
 CREATE VIEW `OpportunityView` AS
-SELECT description, create_date FROM `Opportunity` JOIN `lead_becomes`;
+SELECT `Opportunity`.id description, create_date
+FROM `Opportunity` JOIN `lead_becomes`;
 
 CREATE VIEW `QuoteView` AS
-SELECT description, create_date FROM `Quote` JOIN `opportunity_requests`;
+SELECT `Quote`.id as id, description, create_date FROM `Quote`
+JOIN `opportunity_requests`;
 
 CREATE VIEW `ProductView` AS
-SELECT description, price FROM `Product`;
+SELECT `Product`.id as id, description, price
+FROM `Product`;
 
 CREATE VIEW `OrderView` AS
-SELECT description, create_date FROM `Quote` JOIN `quote_becomes`;
+SELECT `Order`.id as id, description, create_date FROM `Quote`
+JOIN `quote_becomes`;
 
 CREATE VIEW `CurrencyView` AS
-SELECT name, ISO_code FROM `Currency`;
+SELECT id, name, ISO_code FROM `Currency`;
