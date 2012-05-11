@@ -1,0 +1,75 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+   "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>Database Project - Group 6</title>
+<link rel="stylesheet" type="text/css" href="css/styles.css">
+<script type="text/javascript" src="js/jquery.js" charset="utf-8"></script>
+<script type="text/javascript" src="js/jquery.bbq.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="js/common.js" charset="utf-8"></script>
+<script type="text/javascript" src="js/sha2.js" charset="utf-8"></script>
+<script type="text/javascript" language="javascript">
+    $(document).ready(function() {
+        populateMenu();
+        
+        $("#login").click(function() {
+        	login();
+        });
+        
+        $("#register").click(function() {
+        	register();
+        });
+    });
+</script>
+</head>
+<body>
+    <div id="main">
+        <div id="header"><h1><a href="index.html">Database Project — Group 6</a></h1></div>
+        <div id="top-nav">
+        </div>
+        <div id="side-nav">
+            <ul id="site-nav">
+                <li><a href="index.html">Overview</a></li>
+            </ul>
+            
+            <ul id="top-options">
+            </ul>
+            
+            <ul id="bottom-options">
+                <li><a href="settings.html">Settings</a></li>
+            </ul>
+        </div>
+        <div id="content">
+            <h2>Login</h2>
+            
+            <div id="loginForm">
+            	<label for="usernameLogin">Username: </label><br>
+            	<input type="text" name="username" id="usernameLogin"></input>
+            	<br>
+            	<br>
+            	<label for="passwordLogin">Password: </label><br>
+            	<input type="password" name="password" id="passwordLogin"></input>
+            	<br>
+            	<input type="button" id="login" value="Login"></input>
+            </div>
+            
+            <h2>Register</h2>
+            <div id="registerForm">
+            	<label for="usernameRegister">Username: </label><br>
+            	<input type="text" name="username" id="usernameRegister"></input>
+            	<br>
+            	<br>
+            	<label for="passwordRegister">Password: </label><br>
+            	<input type="password" name="password" id="passwordRegister"></input>
+            	<br>
+            	<br>
+            	<label for="emailRegister">Email: </label><br>
+            	<input type="text" name="email" id="emailRegister"></input>
+            	<br>
+            	<input type="button" id="register" value="Register"></input>
+            </div>
+        <span class="clear"></span>
+    	</div>
+    </div>
+</body>
+</html>

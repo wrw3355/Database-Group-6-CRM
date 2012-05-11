@@ -9,6 +9,8 @@
 <script type="text/javascript" src="js/common.js" charset="utf-8"></script>
 <script type="text/javascript" language="javascript">
     $(document).ready(function() {
+    	ensureLoggedIn();
+    	
         populateMenu();
     });
 </script>
@@ -28,6 +30,7 @@
             
             <ul id="bottom-options">
                 <li><a href="settings.html">Settings</a></li>
+                <li><a href="#" id="logout">Logout</a></li>
             </ul>
         </div>
         <div id="content">

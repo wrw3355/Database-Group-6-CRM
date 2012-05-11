@@ -223,7 +223,7 @@ table, td, tr {
     min-height: 300px;
 }
 
-label {
+#entity label {
     margin: 10px 0px 10px 50px;
     float: left;
     width: 150px;
@@ -264,5 +264,22 @@ label {
 
 .attributeText {
 	float: left;
+	width: 550px;
 }
 
+#loginForm label {
+	float: none;
+	text-align: left;
+}
+
+#loginForm input {
+	float: none;
+}
+
+#loginForm, #registerForm {
+	margin-left: 50px;
+}
+
+#login, #register {
+	margin: 20px 0px;
+}

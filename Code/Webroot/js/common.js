@@ -11,11 +11,56 @@ var TYPE_DATE = "date";
 var TYPE_BOOLEAN = "tinyint";
 
 $(document).ready(function() {
-	if (localStorage.getItem("loggedIn") != true) {
+	$("#logout").click(function() {
+		localStorage.setItem("loggedIn", false);
+		localStorage.setItem("userId", -1);
+		window.location = "register.html";
+	});
+});
+
+function ensureLoggedIn() {
+	if (localStorage.getItem("loggedIn") != "true") {
 		window.location = "register.html";
 	}
 }
 
+function login() {
+	var username = $("#usernameLogin").val();
+	var password = $("#passwordLogin").val();
+	
+	var shaPassword = hex_sha256(password);
+	
+	var user = getRecordForEntity("User", username);
+	if (!$.isEmptyObject(user)) {
+		if (user["password"] == shaPassword) {
+			localStorage.setItem("loggedIn", true);
+			localStorage.setItem("userId", user["id"]);
+			window.location = "index.html";
+			return;
+		}
+	}
+	alert("Invalid username or password.");
+}
+
+function register() {
+	var username = $("#usernameRegister").val();
+	var password = $("#passwordRegister").val();
+	var email = $("#emailRegister").val();
+	
+	var shaPassword = hex_sha256(password);
+	
+	var json = {
+			"name": username,
+			"password": shaPassword,
+			"email": email
+	};
+	
+	var userId = createEntity("User", JSON.stringify(json));
+	
+	localStorage.setItem("loggedIn", true);
+	localStorage.setItem("userId", userId);
+	window.location = "index.html";
+}
 
 function initEntityPage() {
     var entity = idMatches["entity"];
@@ -80,8 +125,8 @@ function populateEntityPage() {
                 
             	// Add the currency information
             	if (schema[name] == TYPE_DOUBLE) {
-            		var currency = getRecordForEntity("Currency", "asdf");
-            		value += ' (' + currency["id"] + ')';
+            		var currency = getRecordForEntity("Currency", "null");
+            		value += ' (' + currency["ISO_code"] + ')';
             	}
             	
                 element.html(value);
@@ -134,7 +179,7 @@ function populateEntityPage() {
     }
     else if (entity == "Quote") {
     	insertExternalReference("opportunity", entity, id, mode == MODE_CREATE);
-    	if (mode != MODE_CREATE) {
+    	if (mode == MODE_VIEW) {
     		insertProductTable(id);
     	}
     }
@@ -170,7 +215,7 @@ function populateMenu() {
         
     var topNav = $("#top-nav > ul");
 
-    if (idMatches != null) {
+    if (idMatches != null && !$.isEmptyObject(idMatches)) {
         var entity = toTitleCase(idMatches["entity"]);
         
         var createButton = $("<li/>");

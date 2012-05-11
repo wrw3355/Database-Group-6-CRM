@@ -163,6 +163,9 @@ public class JDBCLogic {
         else if (entityName.equals("Currency")) {
               whereClause = "isPrimary=1;";
         }
+        else if (entityName.equals("User")) {
+            whereClause = "name='" + record.get(ID_COLUMN) + "';";
+        }
         else if (entityName.equals("quote_consists_of")) {
             whereClause = "quote_id=" + record.get(ID_COLUMN) + ";";
         }
