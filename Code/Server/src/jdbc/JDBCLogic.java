@@ -140,6 +140,7 @@ public class JDBCLogic {
             final String entityName) {
 
         String whereClause = "";
+        String eName = entityName;
 
         // TODO: Implement joinString to join the necessary tables
         String joinString = "";
@@ -160,8 +161,9 @@ public class JDBCLogic {
         else if (entityName.equals("quote_becomes")) {
             whereClause = "order_id=" + record.get(ID_COLUMN) + ";";
         }
-        else if (entityName.equals("Currency")) {
+        else if (entityName.equals("CurrencyPrimary")) {
             whereClause = "isPrimary=1;";
+            eName = "Currency";
         }
         else if (entityName.equals("User")) {
             whereClause = "name='" + record.get(ID_COLUMN) + "';";
@@ -176,7 +178,7 @@ public class JDBCLogic {
             whereClause = "1";
         }
 
-        return "SELECT * FROM `" + entityName + "` " + joinString + " WHERE " + whereClause;
+        return "SELECT * FROM `" + eName + "` " + joinString + " WHERE " + whereClause;
     }
 
     /**
