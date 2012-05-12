@@ -818,7 +818,7 @@ function insertExternalReference(externalEntity, entity, entityid, create, selec
 	
 	if (!create) {
 		var external = getExternalReference(entity, entityid);
-		select.attr("value", external[externalEntity + "_id"]);
+		$("#external").children("[id=" + external[externalEntity + "_id"] + "]").attr("selected", true);
 	}
 }
 
