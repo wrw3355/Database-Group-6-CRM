@@ -300,7 +300,7 @@ function populateEntityMenu() {
             }
             
             if($("#external").length > 0) {
-            	handleExternalReference(entity, id, $("#external").val(), mode == MODE_CREATE);
+            	handleExternalReference(entity, id, $("#external option:selected").attr("id"), mode == MODE_CREATE);
             }
             
             window.location = "entityPage.html?id=" + id + "&entity=" + entity + "&mode=view";
@@ -771,7 +771,7 @@ function handleExternalReference(entityName, id, externalId, create) {
 	else {
 		var external = getExternalReference(entity, id);
 		json[entity + "_id"] = id;
-		json[externalEntity + "_id"] = $("#external").val();
+		json[externalEntity + "_id"] = $("#external option:selected").attr("id");
 		json["id"] = external["id"];
 		
 		updateEntity(tableName, JSON.stringify(json), external["id"]);
