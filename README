@@ -1,7 +1,9 @@
-README
+This program is designed to act as Customer Resource Management software. As such, it contains interfaces to interact with entities regarding Companies, Leads, Opportunities, Quote, Orders, and the entities supporting those entities, Products, Users, and Currencies.
 
-Note: This project is still in phase 3.
-  
+This interface is provided in the form of a webpage, which then interacts with a Java backend, which interacts with the MySQL databse via JDBC.
+
+The current deployment of this server can be found http://apollo11.student.rit.edu:8080/index.html . For development purposes, the server should be run locally using the instructions found below.
+
 Authors:
   Nick Garvey
   Matt McCoy
@@ -22,12 +24,14 @@ How to run:
   Right click on Handler.java in Eclipse and hit "Run on Server"
   Point your web browser to http://localhost:8080/DatabaseConceptsServer/rest/Company/1
 
-The directory structure for this project is described below. Note that this is all subject to change as we become more familiar with the requirements for this project.
+The directory structure for this project is described below.
 
 Documents/
 	Used to keep track of any sort of documentation required for this project that isn't source code documentation. 
     Documents such as our ER diagram and any sort of write up will go in this folder.    
    
-
 Code/
 	This is where any source code will be kept. This includes code for the front end, middleware, and database.
+
+Scripts/
+    The scripts to generate the MySQL tables, views, relations, and triggers for the database. The create scripts define the database, and the insert scripts add rows to the database.
