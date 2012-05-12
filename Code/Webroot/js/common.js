@@ -111,6 +111,14 @@ function populateEntityPage() {
                     var value = entities[name];
                     element.attr("value", value);
                 }
+                else {
+                	if (schema[name] == TYPE_DATE) {
+                		element.attr("value", 'YYYY-MM-DD');
+                	}
+                	else if (schema[name] == TYPE_DOUBLE) {
+                		element.attr("value", 0.00);
+                	}
+                }
             }
             else if (mode == MODE_VIEW) {
                 element = $("<div/>");
@@ -606,7 +614,6 @@ function populateGrid() {
     
     var entity = toTitleCase(idMatches["entity"]);
     
-    var pageName = getEntitiesWithText()[entity];
     var pageHeader = $("<h2/>");
     pageHeader.html(toTitleCase(entity));
     
@@ -796,12 +803,12 @@ function insertExternalReference(externalEntity, entity, entityid, create, selec
 		
 		if("name" in entities[id]) {
 			option.html(entities[id]["name"]);
-			option.attr("value", entities[id]["price"])
+			option.attr("value", entities[id]["price"]);
 			option.attr("id", id);
 		}
 		else {
 			option.html(entities[id]["description"]);
-			option.attr("value", id);
+			option.attr("id", id);
 		}
 		
 		select.append(option);
