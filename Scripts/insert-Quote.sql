@@ -1,5 +1,5 @@
-INSERT INTO Quote(description,ship_from_address,discount,tax,open_date,close_date,total_price,ship_type) VALUES ('Quote 1 Description','95502 South Belgium Ave.','1.86','0.07','2012-05-06','2012-05-10','59.83','ground');
-INSERT INTO Quote(description,ship_from_address,discount,tax,open_date,close_date,total_price,ship_type) VALUES ('Quote 2 Description','19374  Cambodia Way','1.92','0.30','2012-05-07','2012-05-09','99.75','air priority');
+INSERT INTO Quote(description,ship_from_address,discount,tax,open_date,close_date,ship_type) VALUES ('Quote 1 Description','95502 South Belgium Ave.','1.86','0.07','2012-05-06','2012-05-10','ground');
+INSERT INTO Quote(description,ship_from_address,discount,tax,open_date,close_date,total_price,ship_type) VALUES ('Quote 2 Description','19374  Cambodia Way','1.92','0.30','2012-05-07','2012-05-09','air priority');
 INSERT INTO Quote(description,ship_from_address,discount,tax,open_date,close_date,total_price,ship_type) VALUES ('Quote 3 Description','53617  Jordan Blvd.','1.51','0.93','2012-05-04','2012-05-09','27.49','tempor');
 INSERT INTO Quote(description,ship_from_address,discount,tax,open_date,close_date,total_price,ship_type) VALUES ('Quote 4 Description','63879 West Indonesia Ln.','0.20','0.76','2012-05-07','2012-05-10','49.48','2-day');
 INSERT INTO Quote(description,ship_from_address,discount,tax,open_date,close_date,total_price,ship_type) VALUES ('Quote 5 Description','77234 West Basin Way','0.23','0.56','2012-05-05','2012-05-10','34.18','ground');

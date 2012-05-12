@@ -1,0 +1,10 @@
+INSERT INTO quote_consists_of (quote_id, product_id, quantity) VALUES(1, 1, 3);
+INSERT INTO quote_consists_of (quote_id, product_id, quantity) VALUES(2, 2, 4);
+INSERT INTO quote_consists_of (quote_id, product_id, quantity) VALUES(3, 3, 2);
+INSERT INTO quote_consists_of (quote_id, product_id, quantity) VALUES(4, 4, 1);
+INSERT INTO quote_consists_of (quote_id, product_id, quantity) VALUES(5, 5, 7);
+INSERT INTO quote_consists_of (quote_id, product_id, quantity) VALUES(6, 1, 8);
+INSERT INTO quote_consists_of (quote_id, product_id, quantity) VALUES(7, 2, 5);
+INSERT INTO quote_consists_of (quote_id, product_id, quantity) VALUES(8, 3, 4);
+INSERT INTO quote_consists_of (quote_id, product_id, quantity) VALUES(9, 4, 3);
+INSERT INTO quote_consists_of (quote_id, product_id, quantity) VALUES(10, 5, 12);
