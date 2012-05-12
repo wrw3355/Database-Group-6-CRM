@@ -879,7 +879,7 @@ function insertHeaderRow(headers, grid) {
 function getSchemaForEntity(entity) {
     $.ajax({
         type: "GET",
-        url: "TYPE_DATE/DatabaseConceptsServer/rest/Schema/" + toTitleCase(entity), 
+        url: "/DatabaseConceptsServer/rest/Schema/" + toTitleCase(entity), 
         dataType: 'json',
         async: false,
         success: function(data) {
@@ -899,7 +899,7 @@ function createEntity(entity, json) {
 	var result = "";
 	$.ajax({
         type: "POST",
-        url: "TYPE_DATE/DatabaseConceptsServer/rest/" + entity,
+        url: "/DatabaseConceptsServer/rest/" + entity,
         data: json,
         contentType:"application/x-www-form-urlencoded; charset=utf-8",
         dataType:"json",
@@ -914,7 +914,7 @@ function createEntity(entity, json) {
 function updateEntity(entity, json, id) {
 	$.ajax({
         type: "PUT",
-        url: "TYPE_DATE/DatabaseConceptsServer/rest/" + entity + "/" + id,
+        url: "/DatabaseConceptsServer/rest/" + entity + "/" + id,
         data: json,
         contentType:"application/x-www-form-urlencoded; charset=utf-8",
         dataType:"json",
@@ -927,7 +927,7 @@ function updateEntity(entity, json, id) {
 function deleteEntity(entity, id) {
 	$.ajax({
         type: "DELETE",
-        url: "TYPE_DATE/DatabaseConceptsServer/rest/" + entity + "/" + id,
+        url: "/DatabaseConceptsServer/rest/" + entity + "/" + id,
         contentType:"application/x-www-form-urlencoded; charset=utf-8",
         dataType:"json",
         async: false,
@@ -945,7 +945,7 @@ function getRecordForEntity(entity, id, useView) {
     }
     
     $.ajax({
-        url: "TYPE_DATE/DatabaseConceptsServer/rest/" + entity + "/" + id, 
+        url: "/DatabaseConceptsServer/rest/" + entity + "/" + id, 
         type: "GET",
         async: false,
         success: function(data) {
