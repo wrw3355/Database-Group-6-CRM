@@ -10,6 +10,9 @@ var TYPE_DOUBLE = "double";
 var TYPE_DATE = "date";
 var TYPE_BOOLEAN = "tinyint";
 
+/**
+ * Allow the user to login.
+ */
 $(document).ready(function() {
 	$("#logout").click(function() {
 		localStorage.setItem("loggedIn", false);
@@ -17,6 +20,7 @@ $(document).ready(function() {
 		window.location = "register.html";
 	});
 });
+
 
 function ensureLoggedIn() {
 	if (localStorage.getItem("loggedIn") != "true") {
