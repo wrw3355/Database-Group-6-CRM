@@ -88,6 +88,9 @@ function populateEntityPage() {
     }
     
     for (name in schema) {
+    	if (name == "id") {
+    		continue;
+    	}
         var element = "";
         var label = $("<label/>");
         if (schema[name] == TYPE_TEXT || schema[name] == TYPE_DATE 
@@ -134,7 +137,7 @@ function populateEntityPage() {
                 
             	// Add the currency information
             	if (schema[name] == TYPE_DOUBLE) {
-            		var currency = getRecordForEntity("Currency", "null");
+            		var currency = getRecordForEntity("CurrencyPrimary", "null");
             		value += ' (' + currency["ISO_code"] + ')';
             	}
             	
@@ -299,6 +302,17 @@ function populateEntityMenu() {
         	}
         	
         	var jsonRecordString = getJSONFromForm();
+        	
+        	if(entity == "Currency" && $("input[id=isPrimary]").attr("checked") == "checked") {
+        		var primaryCurrency = getRecordForEntity(entity+"Primary", "null");
+        		
+        		alert("The primary currency is " + primaryCurrency["id"]);
+        		alert(JSON.stringify(primaryCurrency));	
+        		if (!$.isEmptyObject(primaryCurrency)) {
+        			primaryCurrency["isPrimary"] = 0;
+        			updateEntity("Currency", JSON.stringify(primaryCurrency), primaryCurrency["id"]);
+        		}
+        	}
         	
             if(mode == MODE_CREATE) {                
                 id = createEntity(entity, jsonRecordString);
