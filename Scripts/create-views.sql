@@ -14,7 +14,7 @@ SELECT `Quote`.id as id, description, create_date FROM `Quote`
 JOIN `opportunity_requests`;
 
 CREATE VIEW `ProductView` AS
-SELECT `Product`.id as id, description, price
+SELECT `Product`.id as id, name, price
 FROM `Product`;
 
 CREATE VIEW `OrderView` AS
