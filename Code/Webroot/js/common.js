@@ -695,8 +695,6 @@ function getHeadersForEntity(entity) {
 			
 	}
 	
-	alert(JSON.stringify(result));
-	
 	return result;
 }
 
