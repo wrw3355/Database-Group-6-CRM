@@ -34,7 +34,6 @@ CREATE TABLE `Quote` (
     tax double NOT NULL,
     open_date date NOT NULL,
     close_date date NOT NULL,
-    total_price double NOT NULL,
     ship_type varchar(255) NOT NULL,
     PRIMARY KEY (id)
 );
@@ -54,7 +53,6 @@ CREATE TABLE `Order` (
     ship_from_address varchar(255) NOT NULL,
     ship_type varchar(255) NOT NULL,
     close_type date NOT NULL,
-    total_price double NOT NULL,
     PRIMARY KEY (id)
 );
 
