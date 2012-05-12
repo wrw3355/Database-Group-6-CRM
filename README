@@ -7,21 +7,12 @@ Authors:
   Matt McCoy
   William Wenzel
 
-Completed:
-  Setting up server to host code (apollo11.student.rit.edu)
-  Creating initial instance of the database
-  Implementing basic JDBC code to interact with the database
-  Implementing very basic JAX-RS code to return JSON objects corresponding to entities
-  Implemented a major part of the user interface
-
-In Progress:
-  Adding more information to the database
-  Adding more complicated relations to the database
-  Refining front end, perhaps improving styles
-  Code clean up for JDBC code
-  Confirming that we are able to deploy to apollo11
-  Adding inserting and updating to the JAX-RS code
-
+Important documents to read in Documents/:
+    databasediagram-revised.png - The final version of our ER diagram for the system we implemented. Many changes were
+    made to the design of the system throughout the project's development. Attributes and relationships were removed
+    due to redundancy. The deletion of these attributes and relationships made the system much simpler and overall
+    made it less complicated.
+  
 How to run:
   Install Java 7 SDK
   Install Eclipse for Java EE web developers
@@ -34,7 +25,9 @@ How to run:
 The directory structure for this project is described below. Note that this is all subject to change as we become more familiar with the requirements for this project.
 
 Documents/
-	Used to keep track of any sort of documentation required for this project that isn't source code documentation. Documents such as our ER diagram and any sort of write up will go in this folder.
+	Used to keep track of any sort of documentation required for this project that isn't source code documentation. 
+    Documents such as our ER diagram and any sort of write up will go in this folder.    
+   
 
 Code/
 	This is where any source code will be kept. This includes code for the front end, middleware, and database.
