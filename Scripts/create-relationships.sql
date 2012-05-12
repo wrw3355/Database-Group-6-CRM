@@ -1,14 +1,4 @@
 /* Relationships */
-CREATE TABLE `company_quoted` (
-    id int NOT NULL AUTO_INCREMENT,
-    company_id int NOT NULL,
-    quote_id int NOT NULL,
-    ship_to_address varchar(255) NOT NULL,
-    PRIMARY KEY (id),
-    FOREIGN KEY (company_id) REFERENCES Company(id),
-    FOREIGN KEY (quote_id) REFERENCES Quote(id)
-);
-
 CREATE TABLE `company_gets` (
     id int NOT NULL AUTO_INCREMENT,
     company_id int NOT NULL,
@@ -57,31 +47,4 @@ CREATE TABLE `quote_becomes` (
     PRIMARY KEY (id),
     FOREIGN KEY (quote_id) REFERENCES `Quote`(id),
     FOREIGN KEY (order_id) REFERENCES `Order`(id)
-);
-
-CREATE TABLE `quote_priced_with` (
-    id int NOT NULL AUTO_INCREMENT,
-    quote_id int NOT NULL,
-    currency_id int NOT NULL,
-    PRIMARY KEY (id),
-    FOREIGN KEY (quote_id) REFERENCES `Quote`(id),
-    FOREIGN KEY (currency_id) REFERENCES `Currency`(id)
-);
-
-CREATE TABLE `order_priced_with` (
-    id int NOT NULL AUTO_INCREMENT,
-    order_id int NOT NULL,
-    currency_id int NOT NULL,
-    PRIMARY KEY (id),
-    FOREIGN KEY (order_id) REFERENCES `Order`(id),
-    FOREIGN KEY (currency_id) REFERENCES `Currency`(id)
-);
-
-CREATE TABLE `currency_converts_to` (
-    id int NOT NULL AUTO_INCREMENT,
-    from_currency_id int NOT NULL,
-    to_currency_id int NOT NULL,
-    PRIMARY KEY (id),
-    FOREIGN KEY (from_currency_id) REFERENCES `Currency`(id),
-    FOREIGN KEY (to_currency_id) REFERENCES `Currency`(id)
 );
