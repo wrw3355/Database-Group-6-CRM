@@ -229,6 +229,10 @@ table, td, tr {
     width: 150px;
 }
 
+#entity #quantityLabel {
+    float: none;
+}
+
 #entity input[type=text],
 #entity select {
     width: 300px;
