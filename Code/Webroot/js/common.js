@@ -309,9 +309,6 @@ function populateEntityMenu() {
         	
         	if(entity == "Currency" && $("input[id=isPrimary]").attr("checked") == "checked") {
         		var primaryCurrency = getRecordForEntity(entity+"Primary", "null");
-        		
-        		alert("The primary currency is " + primaryCurrency["id"]);
-        		alert(JSON.stringify(primaryCurrency));	
         		if (!$.isEmptyObject(primaryCurrency)) {
         			primaryCurrency["isPrimary"] = 0;
         			updateEntity("Currency", JSON.stringify(primaryCurrency), primaryCurrency["id"]);
@@ -451,7 +448,6 @@ function updateProductTableRow(quoteId, productSelectId, nQty) {
 	var newQuantity = nQty;
 	if (typeof newQuantity == "undefined" || newQuantity == null) {
 		 newQuantity = quantityValue + parseInt(quantityField.val());
-		 alert("New Quantity: " + newQuantity);
 	}
 	
 	var priceValue = (pricePer * newQuantity).toFixed(2);
