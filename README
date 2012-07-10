@@ -1,4 +1,4 @@
-This program is designed to act as Web 2.0 Customer Resource Management software. As such, it contains interfaces to interact with entities regarding Companies, Leads, Opportunities, Quote, Orders, and the entities supporting those entities, Products, Users, and Currencies.
+This program is designed to act as a Web 2.0 Customer Resource Management software. As such, it contains interfaces to interact with entities regarding Companies, Leads, Opportunities, Quote, Orders, and the entities supporting those entities, Products, Users, and Currencies.
 
 This interface is provided in the form of a webpage, which then interacts with a Java backend, which interacts with the MySQL databse via JDBC.
 
